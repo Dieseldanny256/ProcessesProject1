@@ -1,61 +1,103 @@
 <?php
-require 'db.php'; 
 
-$data = json_decode(file_get_contents("php://input"), true);
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 
-// This step is to help me debig the received data
-if (!$data) {
-    error_log("Debug: No data received or invalid JSON format.");
-    echo json_encode([
-        "status" => "error",
-        "message" => "No data received or invalid JSON format"
-    ]);
-    exit;
-}
+    // This is a security note: Only POST requests are allowed to ensure safe handling of data.
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        echo json_encode([
+            "error" => "Invalid request method. Please use POST.",
+            "instructions" => "Send a POST request with JSON body containing firstName, lastName, login, and password."
+        ]);
+        exit();
+    }
 
-// Checking all the neccessities
-if (!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['username']) || !isset($data['password'])) {
-    error_log("Debug: Missing fields - " . print_r($data, true));
-    echo json_encode([
-        "status" => "error",
-        "message" => "Missing required fields"
-    ]);
-    exit;
-}
+    $inData = getRequestInfo();
 
-// This step is to collect data from JSON
-$firstname = $data['firstname'];
-$lastname = $data['lastname'];
-$username = $data['username'];
-$password = $data['password'];
+    // This step is to check if the JSON or data is valid
+    if ($inData === null) {
+        error_log("Raw input received: " . file_get_contents('php://input'));
+        returnWithError("Invalid JSON format or no data received");
+        exit();
+    }
 
-// This step is to debug, again
-error_log("Debug: Received data - Firstname: $firstname, Lastname: $lastname, Username: $username");
+    // This is to plug the data from JSON
+    $firstName = $inData["firstName"] ?? null;
+    $lastName = $inData["lastName"] ?? null;
+    $login = $inData["login"] ?? null;
+    $password = $inData["password"] ?? null;
 
-// This step is to take information from database
-$stmt = $conn->prepare("SELECT * FROM Users WHERE Login = :username");
-$stmt->bindParam(':username', $username);
-$stmt->execute();
+    // This step is to check if there's anything missing
+    if (empty($firstName) || empty($lastName) || empty($login) || empty($password)) {
+        error_log("Missing fields: " . json_encode($inData));
+        returnWithError("All fields are required");
+        exit();
+    }
 
-// This step is to check if the username exists
-if ($stmt->rowCount() > 0) {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Username already exists"
-    ]);
-    exit;
-}
+    // This step is to connect with the database
+    $conn = new mysqli("localhost", "root", "COP4331password", "COP4331");
+    if ($conn->connect_error) {
+        error_log("Connection failed: " . $conn->connect_error);
+        returnWithError("Connection failed: " . $conn->connect_error);
+        exit();
+    }
 
-// This step is to add a new user
-$stmt = $conn->prepare("INSERT INTO Users (FirstName, LastName, Login, Password) VALUES (:firstname, :lastname, :username, :password)");
-$stmt->bindParam(':firstname', $firstname);
-$stmt->bindParam(':lastname', $lastname);
-$stmt->bindParam(':username', $username);
-$stmt->bindParam(':password', $password);
-$stmt->execute();
+    // This step is to check if the username has existed
+    $stmt = $conn->prepare("SELECT * FROM Users WHERE Login=?");
+    $stmt->bind_param("s", $login);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-echo json_encode([
-    "status" => "success",
-    "message" => "User registered successfully"
-]);
+    if ($result->num_rows > 0) {
+        returnWithError("Username taken");
+    } else {
+        // This step is to HASH passwords and add user
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $conn->prepare("INSERT INTO Users (FirstName, LastName, Login, Password) VALUES(?,?,?,?)");
+        $stmt->bind_param("ssss", $firstName, $lastName, $login, $hashedPassword);
+
+        if ($stmt->execute()) {
+            $id = $conn->insert_id;
+            $searchResults = '{"id": "' . $id . '"}';
+            returnWithInfo($searchResults);
+        } else {
+            error_log("Failed to execute query: " . $stmt->error);
+            returnWithError("Failed to register user");
+        }
+    }
+
+    $stmt->close();
+    $conn->close();
+
+    // This step is extracting JSON data from request
+    function getRequestInfo()
+    {
+        $rawData = file_get_contents('php://input');
+        error_log("Raw input received: " . $rawData);
+        return json_decode($rawData, true);
+    }
+
+    // This step is to returing the result in JSON
+    function sendResultInfoAsJson($obj)
+    {
+        header('Content-type: application/json');
+        echo $obj;
+    }
+
+    // This is error function
+    function returnWithError($err)
+    {
+        $retValue = '{"error":"' . $err . '"}';
+        sendResultInfoAsJson($retValue);
+    }
+
+    // This step means success
+    function returnWithInfo($searchResults)
+    {
+        $retValue = '{"results":[' . $searchResults . '],"error":""}';
+        sendResultInfoAsJson($retValue);
+    }
+
 ?>

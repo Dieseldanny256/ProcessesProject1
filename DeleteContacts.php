@@ -8,7 +8,7 @@
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode([
             "error" => "Invalid request method. Please use POST.",
-            "instructions" => "Send a POST request with JSON body containing login and password."
+            "instructions" => "Send a POST request with JSON body containing userId, firstName, and lastName."
         ]);
         exit();
     }
@@ -17,17 +17,18 @@
 
     // This step is to check if the JSON or data is valid
     if ($inData === null) {
-        error_log("Raw input received: " . file_get_contents('php://input')); // Log dữ liệu nhận được
+        error_log("Raw input received: " . file_get_contents('php://input'));
         returnWithError("Invalid JSON format or no data received");
         exit();
     }
 
     // This is to plug the data from JSON
-    $login = $inData["login"] ?? null;
-    $password = $inData["password"] ?? null;
+    $userId = $inData["userId"] ?? null;
+    $firstName = $inData["firstName"] ?? null;
+    $lastName = $inData["lastName"] ?? null;
 
     // This step is to check if there's anything missing
-    if (empty($login) || empty($password)) {
+    if (empty($userId) || empty($firstName) || empty($lastName)) {
         returnWithError("All fields are required");
         exit();
     }
@@ -35,26 +36,19 @@
     // This step is to connect with the database
     $conn = new mysqli("localhost", "root", "COP4331password", "COP4331");
     if ($conn->connect_error) {
-        error_log("Connection failed: " . $conn->connect_error); // Log lỗi kết nối database
+        error_log("Connection failed: " . $conn->connect_error);
         returnWithError("Connection failed: " . $conn->connect_error);
         exit();
     }
 
-    // This step is to check the username
-    $stmt = $conn->prepare("SELECT ID, FirstName, LastName, Password FROM Users WHERE Login = ?");
-    $stmt->bind_param("s", $login);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // This is the deleting contact step
+    $stmt = $conn->prepare("DELETE FROM Contacts WHERE FirstName = ? AND LastName = ? AND UserID = ?");
+    $stmt->bind_param("ssi", $firstName, $lastName, $userId);
 
-    if ($row = $result->fetch_assoc()) {
-        // This step is to compare the password that has been hashed
-        if (password_verify($password, $row['Password'])) {
-            returnWithInfo($row['FirstName'], $row['LastName'], $row['ID']);
-        } else {
-            returnWithError("Invalid password");
-        }
+    if ($stmt->execute() && $stmt->affected_rows > 0) {
+        returnWithSuccess("Contact deleted successfully");
     } else {
-        returnWithError("No user found");
+        returnWithError("No matching contact found or failed to delete");
     }
 
     $stmt->close();
@@ -78,14 +72,14 @@
     // This is error function
     function returnWithError($err)
     {
-        $retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
+        $retValue = '{"error":"' . $err . '"}';
         sendResultInfoAsJson($retValue);
     }
 
     // This step means success
-    function returnWithInfo($firstName, $lastName, $id)
+    function returnWithSuccess($message)
     {
-        $retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
+        $retValue = '{"message":"' . $message . '","error":""}';
         sendResultInfoAsJson($retValue);
     }
 

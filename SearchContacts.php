@@ -8,7 +8,7 @@
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode([
             "error" => "Invalid request method. Please use POST.",
-            "instructions" => "Send a POST request with JSON body containing login and password."
+            "instructions" => "Send a POST request with JSON body containing search and userId."
         ]);
         exit();
     }
@@ -17,44 +17,51 @@
 
     // This step is to check if the JSON or data is valid
     if ($inData === null) {
-        error_log("Raw input received: " . file_get_contents('php://input')); // Log dữ liệu nhận được
+        error_log("Raw input received: " . file_get_contents('php://input'));
         returnWithError("Invalid JSON format or no data received");
         exit();
     }
 
     // This is to plug the data from JSON
-    $login = $inData["login"] ?? null;
-    $password = $inData["password"] ?? null;
+    $search = $inData["search"] ?? null;
+    $userId = $inData["userId"] ?? null;
 
-    // This step is to check if there's anything missing
-    if (empty($login) || empty($password)) {
+    if (empty($search) || empty($userId)) {
         returnWithError("All fields are required");
         exit();
     }
 
+    $searchResults = "";
+    $searchCount = 0;
+
     // This step is to connect with the database
     $conn = new mysqli("localhost", "root", "COP4331password", "COP4331");
     if ($conn->connect_error) {
-        error_log("Connection failed: " . $conn->connect_error); // Log lỗi kết nối database
+        error_log("Connection failed: " . $conn->connect_error);
         returnWithError("Connection failed: " . $conn->connect_error);
         exit();
     }
 
-    // This step is to check the username
-    $stmt = $conn->prepare("SELECT ID, FirstName, LastName, Password FROM Users WHERE Login = ?");
-    $stmt->bind_param("s", $login);
+    // This step is to search the contact
+    $stmt = $conn->prepare("SELECT * FROM Contacts WHERE (FirstName LIKE ? OR LastName LIKE ?) AND UserID = ?");
+    $searchTerm = "%" . $search . "%";
+    $stmt->bind_param("ssi", $searchTerm, $searchTerm, $userId);
     $stmt->execute();
+
     $result = $stmt->get_result();
 
-    if ($row = $result->fetch_assoc()) {
-        // This step is to compare the password that has been hashed
-        if (password_verify($password, $row['Password'])) {
-            returnWithInfo($row['FirstName'], $row['LastName'], $row['ID']);
-        } else {
-            returnWithError("Invalid password");
+    while ($row = $result->fetch_assoc()) {
+        if ($searchCount > 0) {
+            $searchResults .= ",";
         }
+        $searchCount++;
+        $searchResults .= '{"FirstName":"' . $row["FirstName"] . '","LastName":"' . $row["LastName"] . '","Phone":"' . $row["Phone"] . '","Email":"' . $row["Email"] . '","UserID":"' . $row["UserID"] . '","ID":"' . $row["ID"] . '"}';
+    }
+
+    if ($searchCount == 0) {
+        returnWithError("No Records Found");
     } else {
-        returnWithError("No user found");
+        returnWithInfo($searchResults);
     }
 
     $stmt->close();
@@ -78,14 +85,14 @@
     // This is error function
     function returnWithError($err)
     {
-        $retValue = '{"id":0,"firstName":"","lastName":"","error":"' . $err . '"}';
+        $retValue = '{"error":"' . $err . '"}';
         sendResultInfoAsJson($retValue);
     }
 
     // This step means success
-    function returnWithInfo($firstName, $lastName, $id)
+    function returnWithInfo($searchResults)
     {
-        $retValue = '{"id":' . $id . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","error":""}';
+        $retValue = '{"results":[' . $searchResults . '],"error":""}';
         sendResultInfoAsJson($retValue);
     }
 
