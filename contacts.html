@@ -3,10 +3,15 @@
 <head>
     <title>Infogoblins Contact Manager</title>
     <script type = "text/javascript" src = "js/infogoblins.js"></script>
+    <script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function () {
+			readCookie();
+		}, false);
+	</script>
 </head>
     <body>
         <h1>Infogoblins</h1>
         <h2>Contacts</h2>
-        <p>You logged in!</p>
+        <p>You logged in as <span id="name"></span>!</p>
     </body>
 </html>

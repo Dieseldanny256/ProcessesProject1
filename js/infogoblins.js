@@ -4,6 +4,7 @@ const extension = 'php';
 let userId = 0;
 let firstName = "";
 let lastName = "";
+let loginMode = "login";
 
 function doLogin()
 {
@@ -46,7 +47,7 @@ function doLogin()
 				lastName = jsonObject.lastName;
 
 				saveCookie(); //Saves the cookie (whatever that means)
-	
+                
 				window.location.href = "contacts.html"; //Redirects to the main page
             }
         };
@@ -100,7 +101,7 @@ function doSignUp()
 				lastName = newLastName;
 
 				saveCookie(); //Saves the cookie (whatever that means)
-	
+                
 				window.location.href = "contacts.html"; //Redirects to the main page
             }
         };
@@ -110,6 +111,26 @@ function doSignUp()
     {
         document.getElementById("loginResult").innerHTML = err.message; //Displays the error
     }
+}
+
+function switchToRegister() 
+{
+    if (loginMode === "register") {
+        return;
+    }
+    document.getElementById("Login").classList.add("hidden");
+    document.getElementById("Register").classList.remove("hidden");
+    loginMode = "register";
+}
+
+function switchToLogin()
+{
+    if (loginMode === "login") {
+        return;
+    }
+    document.getElementById("Login").classList.remove("hidden");
+    document.getElementById("Register").classList.add("hidden");
+    loginMode = "login";
 }
 
 function saveCookie()
@@ -150,7 +171,7 @@ function readCookie()
 	}
 	else
 	{
-		document.getElementById("userName").innerHTML = "Salutions, " + firstName + " " + lastName + "!"; //Login to the page
+		document.getElementById("name").innerHTML = firstName + " " + lastName; //Login to the page
 	}
 }
 
