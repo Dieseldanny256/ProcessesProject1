@@ -1,0 +1,95 @@
+:root
+{
+    --background-color:#36363B;
+    --secondary-color:#90959F;
+    --text-color:#EAEDEE;
+    --accent-color-1:#82EE30;
+    --accent-color-2:#4A2B8C;
+}
+
+#titleContainer
+{
+    display: flex;
+    justify-content: center;
+}
+
+.title 
+{
+    visibility: visible;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--accent-color-1);
+    border-width: 3px;
+    border-style: solid;
+    text-align: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    width: 100%;
+}
+
+.loginField
+{
+    display: table;
+    margin: 0 auto;
+}
+
+.textField
+{
+    visibility: visible;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    margin: 3px;
+    width: 250px;
+}
+
+.loginButton
+{
+    visibility: visible;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    margin: 3px;
+    padding: 3px;
+    width: 100px;
+    transition-duration: 0.5s;
+}
+
+.loginButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.loginButton:active {
+    transition-duration: 0s;
+    background-color: var(--accent-color-1);
+    border-color: var(--accent-color-1);
+}
+
+.loginSectionTitle {
+    color:var(--secondary-color);
+    font-size: 28px;
+}
+
+.background
+{
+    background-image: url("../images/infogoblinsBg.jpg");
+    background-size: cover;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.hidden {
+    visibility: hidden;
+    overflow: hidden;
+    display: none;
+}

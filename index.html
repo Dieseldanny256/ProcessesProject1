@@ -3,34 +3,29 @@
 <head>
     <title>Infogoblins Contact Manager</title>
     <script type = "text/javascript" src = "js/infogoblins.js"></script>
+    <link rel="stylesheet" href="css/infogoblins.css"/>
 </head>
-    <body>
-        <h1>Infogoblins</h1>
-        <style>
-            .hidden {
-                visibility: hidden;
-                overflow: hidden;
-                width: 0px;
-                height: 0px;
-            }
-            </style>
-        <div id="Login">
-            <span id="inner-title">Login:</span>
-	        <input type="text" id="loginName" placeholder="Username" /><br />
-	        <input type="password" id="loginPassword" placeholder="Password"/><br />
-	        <button type="button" id="loginButton" class="Button" onclick="doLogin();"> Submit </button>
-	        <span id="loginResult"></span><br />
-            <button type="button" id="registerModeButton" class="Button" onclick="switchToRegister();"> Register </button>
-        </div>
-        <div id="Register" class="hidden">
-            <span id="inner-title">Register:</span>
-            <input type="text" id="firstName" placeholder="First Name"/><br />
-            <input type="text" id="lastName" placeholder="Last Name"/><br />
-	        <input type="text" id="loginName" placeholder="Username" /><br />
-	        <input type="password" id="loginPassword" placeholder="Password"/><br />
-	        <button type="button" id="loginButton" class="Button" onclick="doSignUp();"> Submit </button>
-	        <span id="loginResult"></span><br />
-            <button type="button" id="loginModeButton" class="Button" onclick="switchToLogin();" visible="false"> Login </button>
-        </div>
-    </body>
+<body class = "background">
+    <div id="titleContainer">
+        <h1 class="title">Infogoblins</h1>
+    </div>
+    <div id="Login" class="loginField">
+        <div><span id="inner-title" class="loginSectionTitle">Login:</span></div>
+        <div><input type="text" id="loginName" class="textField" placeholder="Username" /></div>
+        <div><input type="password" id="loginPassword" class="textField" placeholder="Password"/></div>
+        <div><button type="button" id="loginButton" class="loginButton" onclick="doLogin();"> Submit </button></div>
+        <div><span id="loginResult"></span></div>
+        <div><button type="button" id="registerModeButton" class="loginButton" onclick="switchToRegister();"> Register </button></div>
+    </div>
+    <div id="Register" class="loginField hidden">
+        <div><span id="inner-title" class="loginSectionTitle">Register:</span></div>
+        <div><input type="text" id="firstName" class="textField" placeholder="First Name"/></div>
+        <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
+        <div><input type="text" id="registerName" class="textField" placeholder="Username" /></div>
+        <div><input type="password" id="registerPassword" class="textField" placeholder="Password"/></div>
+        <div><button type="button" id="registerButton" class="loginButton" onclick="doSignUp();"> Submit </button></div>
+        <div><span id="registerResult"></span></div>
+        <div><button type="button" id="loginModeButton" class="loginButton" onclick="switchToLogin();" visible="false"> Login </button></div>
+    </div>
+</body>
 </html>
