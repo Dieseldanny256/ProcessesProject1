@@ -2,19 +2,28 @@
 <html>
 <head>
     <title>Infogoblins Contact Manager</title>
+    <link rel="icon" href="images/InfoGoblinRecolor.png" type="image/icon type">
     <script type = "text/javascript" src = "js/infogoblins.js"></script>
     <link rel="stylesheet" href="css/infogoblins.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Trykker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body class = "background">
-    <div id="titleContainer">
-        <h1 class="title">Infogoblins</h1>
+    <div id="titleBar">
+        <img src="images/InfoGoblinRecolor.png" id="InfoGoblinLogo">
+        <div class="titleContainer">
+            <h1 class="title">Infogoblins</h1>
+            <div class="subtitle">Contact Manager</div>
+        </div>
     </div>
     <div id="Login" class="loginField">
         <div><span id="inner-title" class="loginSectionTitle">Login:</span></div>
         <div><input type="text" id="loginName" class="textField" placeholder="Username" /></div>
         <div><input type="password" id="loginPassword" class="textField" placeholder="Password"/></div>
         <div><button type="button" id="loginButton" class="loginButton" onclick="doLogin();"> Submit </button></div>
-        <div><span id="loginResult"></span></div>
+        <div><span id="loginResult" class="errorText"></span></div>
         <div><button type="button" id="registerModeButton" class="loginButton" onclick="switchToRegister();"> Register </button></div>
     </div>
     <div id="Register" class="loginField hidden">
@@ -24,7 +33,7 @@
         <div><input type="text" id="registerName" class="textField" placeholder="Username" /></div>
         <div><input type="password" id="registerPassword" class="textField" placeholder="Password"/></div>
         <div><button type="button" id="registerButton" class="loginButton" onclick="doSignUp();"> Submit </button></div>
-        <div><span id="registerResult"></span></div>
+        <div><span id="registerResult" class="errorText"></span></div>
         <div><button type="button" id="loginModeButton" class="loginButton" onclick="switchToLogin();" visible="false"> Login </button></div>
     </div>
 </body>
