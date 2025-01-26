@@ -1,3 +1,5 @@
+let gravity = 1;
+
 function CreateGoblin(gfx, name = "First Last") {
   if (!gfx) {
     gfx = 'sprite';
@@ -5,10 +7,10 @@ function CreateGoblin(gfx, name = "First Last") {
 
   // animations
   const ANI = {
-    RIGHT: 'gfx/GoblinWalkRight.gif', // change to the correct paths and names
-    LEFT: 'gfx/GoblinWalkLeft.gif',
-    IDLE_RIGHT: 'gfx/GoblinIdleRight.gif',
-    IDLE_LEFT: 'gfx/GoblinIdleLeft.gif'
+    RIGHT: 'images/GoblinWalkRight.gif', // change to the correct paths and names
+    LEFT: 'images/GoblinWalkLeft.gif',
+    IDLE_RIGHT: 'images/GoblinIdleRight.gif',
+    IDLE_LEFT: 'images/GoblinIdleLeft.gif'
   };
 
   // goblin element
@@ -35,10 +37,13 @@ function CreateGoblin(gfx, name = "First Last") {
 
 
   // initial position
-  var x = Math.floor(window.innerWidth / 2) + Math.floor(Math.random() * 600) - 300;
-  var y = window.innerHeight - 60; 
+  var x = Math.floor(window.innerWidth / 2);
+  var y = Math.floor(window.innerHeight / 2);
   ele.style.left = `${x}px`;
   ele.style.top = `${y}px`;
+
+  // initial velocity
+  var y_vel = Math.random() * -20;
 
   // create GIF image element
   var gif = document.createElement("img");
@@ -62,8 +67,15 @@ function CreateGoblin(gfx, name = "First Last") {
 
   // update goblin's behavior and position
   var update = () => {
+    //Gravity
+    y_vel += gravity;
+    y += y_vel;
+
     // keeps goblin on bottom of screen
-    var y = window.innerHeight - 60;
+    if (y > window.innerHeight - 60) {
+      y = window.innerHeight - 60;
+      y_vel = 0;
+    }
     ele.style.top = `${y}px`;
 
     // allows animation to play before switching
@@ -112,13 +124,11 @@ function CreateGoblin(gfx, name = "First Last") {
 
   // main animation loop
   const animate = () => {
-    update();
+    update()
     requestAnimationFrame(animate);
   };
 
-  setTimeout(() => {
-    animate();
-  }, Math.random() * 1000); // random delay
+  animate();// random delay
 
   return ele;
 }
