@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Infogoblins Contact Manager</title>
+    <script type = "text/javascript" src = "js/infogoblins.js"></script>
+    <script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function () {
+			readCookie();
+		}, false);
+	</script>
+    <script src="js/Goblins.js"></script>
+</head>
+    <body>
+        <h1>Infogoblins</h1>
+        <h2>Contacts</h2>
+        <p>You logged in as <span id="name"></span>!</p>
+        <button type="button" id="goblinButton" onclick="goblinize();"> Goblinize </button>
+        <table>
+            <thread>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Phone
+                    </th>
+                </tr>
+            </thread>
+            <tbody id="contactTable"></tbody>
+        </table>
+    </body>
+</html>

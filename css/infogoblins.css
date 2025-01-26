@@ -1,0 +1,158 @@
+:root
+{
+    --background-color:#313145;
+    --secondary-color:#797FA7;
+    --text-color:#E0E3F1;
+    --accent-color-1:#82EE30;
+    --accent-color-2:#7d157b;
+}
+
+#titleBar
+{
+    display: flex;
+    float: top;
+}
+
+#InfoGoblinLogo
+{
+    background-color: var(--background-color);
+    border-width: 3px;
+    border: var(--secondary-color);
+    border-bottom-style: solid;
+    border-right-style: solid;
+    padding: 10px;
+    margin: 0px;
+    width: 100px;
+    height: 100px;
+    border-bottom-right-radius: 10px;
+}
+
+.titleContainer
+{
+    display:block;
+    visibility: visible;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    width: 100%;
+    background-color: var(--background-color);
+    border-bottom-width: 3px;
+    border-bottom: var(--secondary-color);
+    border-bottom-style: solid;
+    margin-top: 0px;
+    margin-bottom: 50px;
+}
+
+.title 
+{
+    color: var(--text-color);
+    text-align: center;
+    font-family: "Cinzel Decorative", serif;
+    font-weight: 700;
+    font-style: normal;
+    margin: 0px;
+}
+
+.subtitle
+{
+    color: var(--text-color);
+    text-align: center;
+    font-family: "Cinzel Decorative", serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 18px;
+}
+
+.loginField
+{
+    display: table;
+    margin: 0 auto;
+}
+
+.textField
+{
+    visibility: visible;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    border-color: var(--secondary-color);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    margin: 3px;
+    width: 300px;
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-size: 18px;
+    font-style: normal;
+    user-select: var(--accent-color-1);
+}
+
+.textField:focus
+{
+    outline-style: none;
+    border-color: var(--accent-color-1);
+}
+
+.loginButton
+{
+    visibility: visible;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    margin: 3px;
+    padding: 3px;
+    width: 100px;
+    transition-duration: 0.5s;
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-size: 18px;
+    font-style: normal;
+}
+
+.loginButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.loginButton:active {
+    transition-duration: 0s;
+    background-color: var(--accent-color-1);
+    border-color: var(--accent-color-1);
+}
+
+.loginSectionTitle {
+    color:var(--text-color);
+    font-size: 28px;
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.errorText {
+    color:var(--accent-color-1);
+    font-size: 18px;
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    width: 300px;
+    font-style: normal;
+}
+
+.background
+{
+    background-image: url("../images/infogoblinsBg.jpg");
+    background-size: cover;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0px;
+}
+
+.hidden {
+    visibility: hidden;
+    overflow: hidden;
+    display: none;
+}
