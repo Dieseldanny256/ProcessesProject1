@@ -26,7 +26,7 @@
     $search = $inData["search"] ?? null;
     $userId = $inData["userId"] ?? null;
 
-    if (empty($search) || empty($userId)) {
+    if (empty($userId)) {
         returnWithError("All fields are required");
         exit();
     }
