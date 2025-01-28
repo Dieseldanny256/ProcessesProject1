@@ -4,7 +4,7 @@
     --secondary-color:#797FA7;
     --text-color:#E0E3F1;
     --accent-color-1:#82EE30;
-    --accent-color-2:#7d157b;
+    --accent-color-2:#f1063d;
 }
 
 #titleBar
@@ -132,7 +132,7 @@
 }
 
 .errorText {
-    color:var(--accent-color-1);
+    color:var(--accent-color-2);
     font-size: 18px;
     font-family: "Trykker", serif;
     font-weight: 400;
@@ -155,4 +155,15 @@
     visibility: hidden;
     overflow: hidden;
     display: none;
+}
+
+.contactTable {
+    border-collapse: collapse;
+    border: 2px solid black; 
+    padding: 5px;
+}
+
+.tableCell {
+    border: 1px solid black;
+    padding: 5px;
 }

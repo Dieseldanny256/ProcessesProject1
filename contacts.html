@@ -2,10 +2,12 @@
 <html>
 <head>
     <title>Infogoblins Contact Manager</title>
+    <link rel="stylesheet" href="css/infogoblins.css"/>
     <script type = "text/javascript" src = "js/infogoblins.js"></script>
     <script type="text/javascript">
 		document.addEventListener('DOMContentLoaded', function () {
 			readCookie();
+            loadContactData();
 		}, false);
 	</script>
     <script src="js/Goblins.js"></script>
@@ -14,22 +16,36 @@
         <h1>Infogoblins</h1>
         <h2>Contacts</h2>
         <p>You logged in as <span id="name"></span>!</p>
-        <button type="button" id="goblinButton" onclick="goblinize();"> Goblinize </button>
-        <table>
-            <thread>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Phone
-                    </th>
-                </tr>
-            </thread>
-            <tbody id="contactTable"></tbody>
-        </table>
+        <div id="contactsMenu">
+            <div>
+                <button type="button" id="goblinButton" onclick="goblinize();"> Goblinize </button>
+                <button type="button" id="goblinButton" onclick="switchToAddContact();"> Add Contact </button>
+            </div>
+            <table class="contactTable">
+                <thread>
+                    <tr>
+                        <th class="tableCell" colspan="2">
+                            Name
+                        </th>
+                        <th class="tableCell">
+                            Phone
+                        </th>
+                        <th class="tableCell" colspan="2">
+                            Email
+                        </th>
+                    </tr>
+                </thread>
+                <tbody id="contactTable"></tbody>
+            </table>
+            <div><span id="editResult" class="errorText"></span></div>
+        </div>
+        <div id="editContactsMenu" class="hidden">
+            <div><span id="editContactTitle" class="loginSectionTitle">Register:</span></div>
+            <div><input type="text" id="firstName" class="textField" placeholder="First Name"/></div>
+            <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
+            <div><input type="text" id="phoneNumber" class="textField" placeholder="Phone Number" /></div>
+            <div><input type="text" id="email" class="textField" placeholder="Email"/></div>
+            <div><button type="button" id="submitButton" class="loginButton" onclick=""> Confirm </button></div>
+        </div>
     </body>
 </html>
