@@ -363,6 +363,46 @@ function editContact(id)
     }
 }
 
+function validatePhoneNumber()
+{
+    var errorColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-2");
+    var normalColor = window.getComputedStyle(document.body).getPropertyValue("--secondary-color");
+    var accentColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-1");
+
+    //Validation of phone number
+    let phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(document.getElementById("phoneNumber").value))
+    {
+        document.getElementById("phoneNumber").style.borderColor = errorColor;
+        document.getElementById("submitButton").disabled = true;
+    }
+    else
+    {
+        document.getElementById("submitButton").disabled = false;
+        document.getElementById("phoneNumber").style.borderColor = null;
+    }
+}
+
+function validateEmail()
+{
+    var errorColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-2");
+    var normalColor = window.getComputedStyle(document.body).getPropertyValue("--secondary-color");
+    var accentColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-1");
+
+    //Validation of email
+    let emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+    if (!emailRegex.test(document.getElementById("email").value))
+    {
+        document.getElementById("email").style.borderColor = errorColor;
+        document.getElementById("submitButton").disabled = true;
+    }
+    else
+    {
+        document.getElementById("submitButton").disabled = false;
+        document.getElementById("email").style.borderColor = null;
+    }
+}
+
 function deleteContact(id)
 {
     //Get contact first and last name

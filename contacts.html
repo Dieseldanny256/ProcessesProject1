@@ -12,6 +12,14 @@
             {
                 loadContactData();
             }, false);
+            document.getElementById("phoneNumber").addEventListener("keyup", function() 
+            {
+                validatePhoneNumber();
+            }, false);
+            document.getElementById("email").addEventListener("keyup", function() 
+            {
+                validateEmail();
+            }, false);
 		}, false);
 	</script>
     <script src="js/Goblins.js"></script>
@@ -25,7 +33,8 @@
                 <div><input type="text" id="searchBar" placeholder="Search"/></div>
                 <div>
                     <button type="button" id="goblinButton" onclick="goblinize();"> Goblinize </button>
-                    <button type="button" id="goblinButton" onclick="switchToAddContact();"> Add Contact </button>
+                    <button type="button" id="contactButton" onclick="switchToAddContact();"> Add Contact </button>
+                    <button type="button" id="logoutButton" onclick="doLogout();"> Logout </button>
                 </div>
             </div>
             <table class="contactTable">

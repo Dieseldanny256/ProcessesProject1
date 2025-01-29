@@ -84,7 +84,6 @@
     font-weight: 400;
     font-size: 18px;
     font-style: normal;
-    user-select: var(--accent-color-1);
 }
 
 .textField:focus
