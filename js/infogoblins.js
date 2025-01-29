@@ -178,7 +178,7 @@ function readCookie()
 
 function loadContactData()
 {
-    let search_string = "";
+    let search_string = document.getElementById("searchBar").value;
     let packet = {"search":search_string, "userId":userId}; //Generate a packet to send (search for empty string)
     let jsonPayload = JSON.stringify(packet); //Generates the packet
 

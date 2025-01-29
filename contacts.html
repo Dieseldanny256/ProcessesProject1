@@ -8,18 +8,25 @@
 		document.addEventListener('DOMContentLoaded', function () {
 			readCookie();
             loadContactData();
+            document.getElementById("searchBar").addEventListener("keyup", function() 
+            {
+                loadContactData();
+            }, false);
 		}, false);
 	</script>
     <script src="js/Goblins.js"></script>
 </head>
     <body>
         <h1>Infogoblins</h1>
-        <h2>Contacts</h2>
-        <p>You logged in as <span id="name"></span>!</p>
         <div id="contactsMenu">
             <div>
-                <button type="button" id="goblinButton" onclick="goblinize();"> Goblinize </button>
-                <button type="button" id="goblinButton" onclick="switchToAddContact();"> Add Contact </button>
+                <h2>Contacts</h2>
+                <p>You logged in as <span id="name"></span>!</p>
+                <div><input type="text" id="searchBar" placeholder="Search"/></div>
+                <div>
+                    <button type="button" id="goblinButton" onclick="goblinize();"> Goblinize </button>
+                    <button type="button" id="goblinButton" onclick="switchToAddContact();"> Add Contact </button>
+                </div>
             </div>
             <table class="contactTable">
                 <thread>
@@ -45,7 +52,10 @@
             <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
             <div><input type="text" id="phoneNumber" class="textField" placeholder="Phone Number" /></div>
             <div><input type="text" id="email" class="textField" placeholder="Email"/></div>
-            <div><button type="button" id="submitButton" class="loginButton" onclick=""> Confirm </button></div>
+            <div>
+                <button type="button" id="submitButton" class="loginButton" onclick=""> Confirm </button>
+                <button type="button" id="returnButton" class="loginButton" onclick="switchToContactsMenu();"> Cancel </button>
+            </div>
         </div>
     </body>
 </html>
