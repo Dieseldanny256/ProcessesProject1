@@ -40,6 +40,8 @@
     border-bottom-style: solid;
     margin-top: 0px;
     margin-bottom: 50px;
+    position: absolute;
+    z-index: -1;
 }
 
 .title 
