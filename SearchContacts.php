@@ -43,9 +43,10 @@
     }
 
     // This step is to search the contact
-    $stmt = $conn->prepare("SELECT * FROM Contacts WHERE (FirstName LIKE ? OR LastName LIKE ?) AND UserID = ?");
-    $searchTerm = "%" . $search . "%";
-    $stmt->bind_param("ssi", $searchTerm, $searchTerm, $userId);
+    $stmt = $conn->prepare("SELECT * FROM Contacts WHERE (CONCAT(FirstName, ' ', LastName) LIKE ?) AND UserID = ?");
+    
+    $searchItem = "%" . $search . "%";
+    $stmt->bind_param("si", $searchItem, $userId);
     $stmt->execute();
 
     $result = $stmt->get_result();

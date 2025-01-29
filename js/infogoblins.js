@@ -253,6 +253,8 @@ function switchToEditContact(id)
     document.getElementById("submitButton").innerHTML = "Save Changes";
     document.getElementById("submitButton").onclick = function() {editContact(id);}
     document.getElementById("editContactTitle").innerHTML = "Edit Contact:";
+    document.getElementById("phoneNumber").style.borderColor = null;
+    document.getElementById("email").style.borderColor = null;
 
     //Load in the current data:
     let row = Array.from(document.getElementById(`row${id}`).cells); //Gets the data in all the rows
@@ -263,6 +265,8 @@ function switchToEditContact(id)
     document.getElementById("lastName").value = row[1].innerHTML;
     document.getElementById("phoneNumber").value = phone_num;
     document.getElementById("email").value = row[3].innerHTML;
+    document.getElementById("phoneNumber").style.borderColor = null;
+    document.getElementById("email").style.borderColor = null;
 }
 
 function switchToContactsMenu() 
@@ -366,8 +370,6 @@ function editContact(id)
 function validatePhoneNumber()
 {
     var errorColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-2");
-    var normalColor = window.getComputedStyle(document.body).getPropertyValue("--secondary-color");
-    var accentColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-1");
 
     //Validation of phone number
     let phoneRegex = /^[0-9]{10}$/;
@@ -386,8 +388,6 @@ function validatePhoneNumber()
 function validateEmail()
 {
     var errorColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-2");
-    var normalColor = window.getComputedStyle(document.body).getPropertyValue("--secondary-color");
-    var accentColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-1");
 
     //Validation of email
     let emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
