@@ -4,6 +4,11 @@
     <title>Infogoblins Contact Manager</title>
     <link rel="stylesheet" href="css/infogoblins.css"/>
     <script type = "text/javascript" src = "js/infogoblins.js"></script>
+    <link rel="stylesheet" href="https://use.typekit.net/tge5jxx.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Trykker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
     <script type="text/javascript">
 		document.addEventListener('DOMContentLoaded', function () {
 			readCookie();
@@ -24,12 +29,23 @@
 	</script>
     <script src="js/Goblins.js"></script>
 </head>
-    <body>
-        <h1 class="title">Infogoblins</h1>
+    <body class = "background">
+        <div id="titleBar">
+            <div class="titleBarImg" style="border-right-style: solid; border-bottom-style: solid; border-bottom-right-radius: 10px;">
+                <a href="index.html"><img src="images/InfoGoblinRecolor.png" id="InfoGoblinLogo"></a>
+            </div>
+            <div class="titleContainer"id="titleContainer">
+                <h1 class="title">Infogoblins</h1>
+                <div class="subtitle">Contact Manager</div>
+            </div>
+            <div class="titleBarImg" style="border-left-style: solid; border-bottom-style: solid; border-bottom-left-radius: 10px;">
+                <a href="https://github.com/Dieseldanny256/ProcessesProject1"><img src="images/github-mark-white.png" id="GitHubLogo"></a>
+            </div>
+        </div>
         <div id="contactsMenu">
             <div>
-                <h2>Contacts</h2>
-                <p>You logged in as <span id="name"></span>!</p>
+                <h2 class="sectionTitle">Contacts</h2>
+                <p class="text">You logged in as <span id="name"></span>!</p>
                 <div><input type="text" id="searchBar" placeholder="Search"/></div>
                 <div>
                     <button type="button" id="goblinButton" onclick="goblinize();"> Goblinize </button>
@@ -56,7 +72,7 @@
             <div><span id="editResult" class="errorText"></span></div>
         </div>
         <div id="editContactsMenu" class="hidden">
-            <div><span id="editContactTitle" class="loginSectionTitle">Register:</span></div>
+            <div><span id="editContactTitle" class="sectionTitle">Register:</span></div>
             <div><input type="text" id="firstName" class="textField" placeholder="First Name"/></div>
             <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
             <div><input type="text" id="phoneNumber" class="textField" placeholder="Phone Number" /></div>

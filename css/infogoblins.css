@@ -9,47 +9,42 @@
 
 #titleBar
 {
-    display: flex;
+    display: table;
+    width: 100vw;
     float: top;
 }
 
 #InfoGoblinLogo
 {
-    background-color: var(--background-color);
-    border-width: 3px;
-    border: var(--secondary-color);
-    border-bottom-style: solid;
-    border-right-style: solid;
-    padding: 10px;
-    margin: 0px;
     width: 140px;
     height: 140px;
-    border-bottom-right-radius: 10px;
 }
 
 #GitHubLogo
 {
-    position: fixed;
-    right: 0px;
+    width: 140px;
+    height: 140px;
+}
+
+.titleBarImg
+{
+    display: table-cell;
     background-color: var(--background-color);
     border-width: 3px;
     border: var(--secondary-color);
-    border-bottom-style: solid;
-    border-left-style: solid;
     padding: 10px;
     margin: 0px;
     width: 140px;
     height: 140px;
-    border-bottom-left-radius: 10px;
 }
 
 .titleContainer
 {
-    display:block;
+    width: 80%;
+    display: table-cell;
     visibility: visible;
     padding-bottom: 10px;
     padding-top: 10px;
-    width: 100%;
     background-color: var(--background-color);
     border-bottom-width: 3px;
     border-bottom: var(--secondary-color);
@@ -180,9 +175,18 @@
     border-color: var(--accent-color-1);
 }
 
-.loginSectionTitle {
+.sectionTitle {
     color:var(--text-color);
     font-size: 28px;
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-style: normal;
+    margin-bottom: 1px;
+}
+
+.text {
+    color:var(--text-color);
+    font-size: 18px;
     font-family: "Trykker", serif;
     font-weight: 400;
     font-style: normal;
@@ -224,4 +228,5 @@
 .tableCell {
     border: 1px solid black;
     padding: 5px;
+    background: var(--text-color);
 }
