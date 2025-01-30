@@ -22,9 +22,25 @@
     border-right-style: solid;
     padding: 10px;
     margin: 0px;
-    width: 100px;
-    height: 100px;
+    width: 140px;
+    height: 140px;
     border-bottom-right-radius: 10px;
+}
+
+#GitHubLogo
+{
+    position: fixed;
+    right: 0px;
+    background-color: var(--background-color);
+    border-width: 3px;
+    border: var(--secondary-color);
+    border-bottom-style: solid;
+    border-left-style: solid;
+    padding: 10px;
+    margin: 0px;
+    width: 140px;
+    height: 140px;
+    border-bottom-left-radius: 10px;
 }
 
 .titleContainer
@@ -48,10 +64,11 @@
 {
     color: var(--text-color);
     text-align: center;
-    font-family: "Cinzel Decorative", serif;
+    font-family: "nelson", serif;
     font-weight: 700;
     font-style: normal;
-    margin: 0px;
+    margin: -20px;
+    font-size: 75px;
 }
 
 .subtitle
@@ -61,13 +78,53 @@
     font-family: "Cinzel Decorative", serif;
     font-weight: 700;
     font-style: normal;
-    font-size: 18px;
+    font-size: 25px;
 }
 
 .loginField
 {
-    display: table;
-    margin: 0 auto;
+    display: flex;
+    margin-top: 300px;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginContainer
+{
+    display:block;
+    visibility: visible;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    width: 324px;
+    background-color: var(--background-color);
+    border-width: 3px;
+    border: var(--secondary-color);
+    border-style: solid;
+    margin-top: 0px;
+    margin-bottom: 50px;
+    position: absolute;
+    z-index: -1;
+    border-radius: 10px;
+}
+
+.registerContainer
+{
+    display:block;
+    visibility: visible;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-left: 10px;
+    width: 324px;
+    background-color: var(--background-color);
+    border-width: 3px;
+    border: var(--secondary-color);
+    border-style: solid;
+    margin-top: 0px;
+    margin-bottom: 50px;
+    position: absolute;
+    z-index: -1;
+    border-radius: 10px;
 }
 
 .textField
@@ -104,7 +161,8 @@
     border-style: solid;
     border-radius: 5px;
     text-align: center;
-    margin: 3px;
+    margin-left: 3px;
+    margin-top: 5px;
     padding: 3px;
     width: 100px;
     transition-duration: 0.5s;
@@ -130,6 +188,7 @@
     font-family: "Trykker", serif;
     font-weight: 400;
     font-style: normal;
+    margin-bottom: 1px;
 }
 
 .errorText {
