@@ -204,6 +204,7 @@ function loadContactData()
                 
                 //Contacts were loaded sucessfully
                 //For each contact in the results array
+                jsonObject.results.sort(function(a, b){return a.FirstName.localeCompare(b.FirstName)});
                 numContacts = jsonObject.results.length
 				for (let i = 0; i < numContacts; i++) {
                     //Name

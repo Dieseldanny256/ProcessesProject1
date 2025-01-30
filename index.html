@@ -23,36 +23,36 @@
     </div>
     
     <div id="Login" class="loginField">
-
-        <div class="loginContainer">
-            <div><span id="inner-title" class="loginSectionTitle">Login:</span></div>
-            <div><input type="text" id="loginName" class="textField" placeholder="Username" /></div>
-            <div><input type="password" id="loginPassword" class="textField" placeholder="Password"/></div>
-            <div><button type="button" id="loginButton" class="loginButton" onclick="doLogin();"> Login </button></div>
-            <div><span id="loginResult" class="errorText"></span></div>
-        </div>
-
-        <div style="position:fixed; bottom: 0; margin-bottom: 5%;">
-            <span class="loginSectionTitle" style="font-size:18px;">Don't have an account?</span><br/>
-            <button type="button" id="registerModeButton" class="loginButton" onclick="switchToRegister();"> Register </button>
+        <div style="display: block;">
+            <div class="loginContainer">
+                <div><span id="inner-title" class="loginSectionTitle">Login:</span></div>
+                <div><input type="text" id="loginName" class="textField" placeholder="Username" /></div>
+                <div><input type="password" id="loginPassword" class="textField" placeholder="Password"/></div>
+                <div><button type="button" id="loginButton" class="loginButton" onclick="doLogin();"> Login </button></div>
+                <div><span id="loginResult" class="errorText"></span></div>
+            </div>
+            <div style="margin-top: 20%;">
+                <span class="loginSectionTitle" style="font-size:18px;">Don't have an account?</span><br/>
+                <button type="button" id="registerModeButton" class="loginButton" onclick="switchToRegister();"> Register </button>
+            </div>
         </div>
     </div>
 
     <div id="Register" class="loginField hidden">
-
-        <div class="registerContainer">
-            <div><span id="inner-title" class="loginSectionTitle">Register:</span></div>
-            <div><input type="text" id="firstName" class="textField" placeholder="First Name"/></div>
-            <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
-            <div><input type="text" id="registerName" class="textField" placeholder="Username" /></div>
-            <div><input type="password" id="registerPassword" class="textField" placeholder="Password"/></div>
-            <div><button type="button" id="registerButton" class="loginButton" onclick="doSignUp();"> Register </button></div>
-            <div><span id="registerResult" class="errorText"></span></div>
-        </div>
-
-        <div style="position:fixed; bottom: 0; margin-bottom: 5%;">
-            <span class="loginSectionTitle" style="font-size:18px;">Already a member?</span><br/>
-            <div><button type="button" id="loginModeButton" class="loginButton" onclick="switchToLogin();" visible="false"> Login </button></div>
+        <div style="display: block;">
+            <div class="registerContainer">
+                <div><span id="inner-title" class="loginSectionTitle">Register:</span></div>
+                <div><input type="text" id="firstName" class="textField" placeholder="First Name"/></div>
+                <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
+                <div><input type="text" id="registerName" class="textField" placeholder="Username" /></div>
+                <div><input type="password" id="registerPassword" class="textField" placeholder="Password"/></div>
+                <div><button type="button" id="registerButton" class="loginButton" onclick="doSignUp();"> Register </button></div>
+                <div><span id="registerResult" class="errorText"></span></div>
+            </div>
+            <div style="margin-top: 20%;">
+                <span class="loginSectionTitle" style="font-size:18px;">Already a member?</span><br/>
+                <div><button type="button" id="loginModeButton" class="loginButton" onclick="switchToLogin();" visible="false"> Login </button></div>
+            </div>
         </div>
     </div>
 </body>

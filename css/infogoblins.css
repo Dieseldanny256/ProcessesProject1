@@ -84,7 +84,7 @@
 .loginField
 {
     display: flex;
-    margin-top: 300px;
+    margin-top: 30px;
     align-items: center;
     justify-content: center;
 }
@@ -103,7 +103,7 @@
     border-style: solid;
     margin-top: 0px;
     margin-bottom: 50px;
-    position: absolute;
+    /*position: absolute;*/
     border-radius: 10px;
 }
 
@@ -121,7 +121,7 @@
     border-style: solid;
     margin-top: 0px;
     margin-bottom: 50px;
-    position: absolute;
+    /*position: absolute;*/
     border-radius: 10px;
 }
 
