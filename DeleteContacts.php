@@ -8,7 +8,7 @@
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         echo json_encode([
             "error" => "Invalid request method. Please use POST.",
-            "instructions" => "Send a POST request with JSON body containing userId, firstName, and lastName."
+            "instructions" => "Send a POST request with JSON body containing contactId and userId."
         ]);
         exit();
     }
@@ -23,13 +23,12 @@
     }
 
     // This is to plug the data from JSON
+    $contactId = $inData["contactId"] ?? null;
     $userId = $inData["userId"] ?? null;
-    $firstName = $inData["firstName"] ?? null;
-    $lastName = $inData["lastName"] ?? null;
 
     // This step is to check if there's anything missing
-    if (empty($userId) || empty($firstName) || empty($lastName)) {
-        returnWithError("All fields are required");
+    if (empty($contactId) || empty($userId)) {
+        returnWithError("Both contactId and userId are required");
         exit();
     }
 
@@ -42,8 +41,8 @@
     }
 
     // This is the deleting contact step
-    $stmt = $conn->prepare("DELETE FROM Contacts WHERE FirstName = ? AND LastName = ? AND UserID = ?");
-    $stmt->bind_param("ssi", $firstName, $lastName, $userId);
+    $stmt = $conn->prepare("DELETE FROM Contacts WHERE ID = ? AND UserID = ?");
+    $stmt->bind_param("ii", $contactId, $userId);
 
     if ($stmt->execute() && $stmt->affected_rows > 0) {
         returnWithSuccess("Contact deleted successfully");
@@ -62,7 +61,7 @@
         return json_decode($rawData, true);
     }
 
-    // This step is to returing the result in JSON
+    // This step is to returning the result in JSON
     function sendResultInfoAsJson($obj)
     {
         header('Content-type: application/json');
