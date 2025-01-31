@@ -200,6 +200,14 @@ function loadContactData()
                 if (jsonObject.error != "") {
                     //Add error text here
                     document.getElementById("contactTable").innerHTML = tableData;
+                    if (goblinized)
+                        {
+                            //Hide all goblins
+                            for (let goblinID in goblins)
+                            {
+                                goblins[goblinID].div.classList.add("hidden");
+                            }
+                        }
 					return;
                 } 
                 
@@ -222,8 +230,27 @@ function loadContactData()
                         <button type="button" id="deleteRow${jsonObject.results[i].ID}" onClick="deleteContact(${jsonObject.results[i].ID});">Delete</button>
                     </td></tr>`
                 }
-                
+
                 document.getElementById("contactTable").innerHTML = tableData;
+
+                if (goblinized)
+                {
+                    //Check for changes
+                    for (let goblinID in goblins)
+                    {
+                        let found = false;
+                        for (let contact of jsonObject.results)
+                        {
+                            if (contact.ID == goblinID)
+                            {
+                                found = true;
+                                goblins[goblinID].div.classList.remove("hidden");
+                                break;
+                            }
+                        }
+                        if (!found && !goblins[goblinID].removed) goblins[goblinID].div.classList.add("hidden");
+                    }
+                }
             }
         };
         xhr.send(jsonPayload); //Send the packet
@@ -358,6 +385,10 @@ function editContact(id)
 				document.getElementById("editResult").innerHTML = jsonObject.message;
                 loadContactData(); //Reload the contacts menu
                 switchToContactsMenu();
+                if (goblinized)
+                {
+                    goblins[id].nameBox.textContent = contactFirstName + " " + contactLastName;
+                }
             }
         };
         xhr.send(jsonPayload); //Send the packet
@@ -432,7 +463,7 @@ function deleteContact(id)
                 //Contact was added successfully
 				document.getElementById("editResult").innerHTML = jsonObject.message;
                 loadContactData(); //Reload the contacts menu
-                removeGoblin(id);
+                if (goblinized) goblins[id].remove();
             }
         };
         xhr.send(jsonPayload); //Send the packet
@@ -458,14 +489,38 @@ function goblinize() {
     {
         return;
     }
-    Array.from(document.getElementById("contactTable").rows).forEach((row) =>
+
+    let packet = {"search":"", "userId":userId}; //Generate a packet to send (search for empty string)
+    let jsonPayload = JSON.stringify(packet); //Generates the packet
+
+    let url = urlBase + '/SearchContacts.' + extension //generates the signUp url
+
+    let xhr = new XMLHttpRequest(); //Generates a new HttpRequest object
+    xhr.open("POST", url, true); //Initializes the xhr module for requests
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    try
     {
-        let row_data = Array.from(row.cells);
-        let id = parseInt(row.id.substring(3));
-        console.log(row.id.substring(3));
-        let contactFirstName = row_data[0].innerHTML;
-        let contactLastName = row_data[1].innerHTML;
-        CreateGoblin(5, id, contactFirstName + " " + contactLastName);
-    });
-    goblinized = true;
+        //Called when the packet is recieved
+        xhr.onreadystatechange = function()
+        {
+            if (this.readyState == 4 && this.status == 200)
+            {
+                let jsonObject = JSON.parse(xhr.responseText); //Converts the packet to an object
+                if (jsonObject.error != "") return;
+                
+                //Contacts were loaded sucessfully
+                //For each contact in the results array
+				for (let i = 0; i < numContacts; i++) {
+                    goblins[jsonObject.results[i].ID] = new Goblin(jsonObject.results[i].ID, 
+                        jsonObject.results[i].FirstName, jsonObject.results[i].LastName);
+                }
+                goblinized = true;
+            }
+        };
+        xhr.send(jsonPayload); //Send the packet
+    }
+    catch(err)
+    {
+        //Displays the error
+    }
 }

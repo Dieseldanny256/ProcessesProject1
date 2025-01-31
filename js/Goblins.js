@@ -1,136 +1,152 @@
 let gravity = 1;
+let goblins = {}; //Stores all of the goblin data
 
-function CreateGoblin(gfx, id, name = "First Last") {
-  if (!gfx) {
-    gfx = 'sprite';
-  }
-
+class Goblin {
   // animations
-  const ANI = {
+  static ANI = {
     RIGHT: 'images/GoblinWalkRight.gif', // change to the correct paths and names
     LEFT: 'images/GoblinWalkLeft.gif',
     IDLE_RIGHT: 'images/GoblinIdleRight.gif',
     IDLE_LEFT: 'images/GoblinIdleLeft.gif'
   };
 
-  // goblin element
-  var ele = document.createElement("div");
-  ele.id = "goblin" + id;
-  ele.style.position = 'fixed';
-  ele.style.width = '64px';
-  ele.style.height = '64px';
-  document.body.appendChild(ele);
+  constructor(id, firstName, lastName)
+  {
+    this.id = id;
 
-  // goblin's name
-  let removed = false;
-  var nameBox = document.createElement("div");
-  nameBox.style.position = 'absolute';
-  nameBox.style.top = '-20px';
-  nameBox.style.fontSize = '18px';
-  nameBox.style.fontFamily = 'Trykker';
-  nameBox.style.color = '#000';
-  nameBox.textContent = name;
-  nameBox.style.textAlign = 'center';
-  nameBox.style.whiteSpace = 'nowrap'; 
-  ele.appendChild(nameBox);
+    // Div
+    this.div = document.createElement("div");
+    this.div.id = "goblin" + id;
+    this.div.style.position = 'fixed';
+    this.div.style.width = '64px';
+    this.div.style.height = '64px';
+    document.body.appendChild(this.div);
 
-  // dynamically center the name
-  nameBox.style.left = `calc(42% - ${nameBox.offsetWidth / 2}px)`;
+    // Name
+    this.nameBox = document.createElement("div");
+    this.nameBox.style.position = 'absolute';
+    this.nameBox.style.top = '-30px';
+    this.nameBox.style.fontSize = '18px';
+    this.nameBox.style.fontFamily = 'Trykker';
+    this.nameBox.style.color = window.getComputedStyle(document.body).getPropertyValue("--text-color");
+    this.nameBox.textContent = firstName + " " + lastName;
+    this.nameBox.style.textAlign = 'center';
+    this.nameBox.style.whiteSpace = 'nowrap'; 
+    this.nameBox.style.background = window.getComputedStyle(document.body).getPropertyValue("--background-color");
+    this.nameBox.style.borderRadius = '5px';
+    this.nameBox.style.padding = '3px';
+    this.div.appendChild(this.nameBox);
 
+    // initial position/velocity
+    this.position = [75, 100];
+    this.velocity = [0, Math.random() * -20];
 
-  // initial position
-  var x = Math.floor(window.innerWidth / 2);
-  var y = Math.floor(window.innerHeight / 2);
-  ele.style.left = `${x}px`;
-  ele.style.top = `${y}px`;
+    // Dynamically center the name
+    this.nameBox.style.left = `calc(42% - ${this.nameBox.offsetWidth / 2}px)`;
 
-  // initial velocity
-  var y_vel = Math.random() * -20;
+    // Image Element
+    this.gif = document.createElement("img");
+    this.div.appendChild(this.gif);
+    this.gif.style.width = '55px';
+    this.gif.style.height = '60px';
 
-  // create GIF image element
-  var gif = document.createElement("img");
-  ele.appendChild(gif);
-  gif.style.width = '55px';
-  gif.style.height = '60px';
+    this.behavior;
+    this.duration = 0;
+    this.check = true;
+    this.moveSpeed = 3;
+    this.prevAnimation = 0;
+    this.removed = false;
+  
+    // start with idle animation
+    this.setAnim(Goblin.ANI.IDLE_RIGHT);
+  }
 
-  var behavior;
-  var duration = 0;
-  var check = true;
-  var moveSpeed = 3;
-  var prevAnimation = 0;
+  setAnim(a) {
+    this.gif.src = a;
+  }
 
-  // set animation function
-  var setAnim = (a) => {
-    gif.src = a;
-  };
-
-  // start with idle animation
-  setAnim(ANI.IDLE_RIGHT);
-
-  // update goblin's behavior and position
-  var update = () => {
+  update() {
     //Gravity
-    y_vel += gravity;
-    y += y_vel;
+    this.velocity[1] += gravity;
+    this.position[1] += this.velocity[1];
 
     // keeps goblin on bottom of screen
-    if (!removed && y > window.innerHeight - 60) {
-      y = window.innerHeight - 60;
-      y_vel = 0;
+    if (!this.removed && this.position[1] > window.innerHeight - 60) {
+      this.position[1] = window.innerHeight - 60;
+      this.velocity[1] = 0;
     }
-    ele.style.top = `${y}px`;
+    this.div.style.top = `${this.position[1]}px`;
 
     // allows animation to play before switching
-    if (duration > 0) {
-      duration--;
+    if (this.duration > 0) {
+      this.duration--;
     } else {
-      check = true; 
+      this.check = true; 
     }
 
     // goblin movement logic
-    if (behavior == 1 || behavior == 2) {
-      if (behavior == 1) {
-        x -= moveSpeed;
+    if (this.behavior == 1 || this.behavior == 2) {
+      if (this.behavior == 1) {
+        this.position[0] -= this.moveSpeed;
       } else {
-        x += moveSpeed;
+        this.position[0] += this.moveSpeed;
       }
-      ele.style.left = `${x}px`;
 
       // prevent the goblin from going off-screen
-      if (x < 0) x = 0;
-      if (x > window.innerWidth - 64) x = window.innerWidth - 64;
+      if (this.position[0] < 0) this.position[0] = 0;
+      if (this.position[0] > window.innerWidth - 64) this.position[0] = window.innerWidth - 64;
     }
+    //Set the goblin's div's horizontal position
+    this.div.style.left = `${this.position[0]}px`;
 
     // random behavior
-    if (check) {
-      duration = Math.floor(Math.random() * (40 - 20 + 1)) + 20;
-      behavior = Math.floor(Math.random() * 5);
+    if (this.check) {
+      this.duration = Math.floor(Math.random() * (40 - 20 + 1)) + 20;
+      this.behavior = Math.floor(Math.random() * 5);
 
-      if (behavior == 1) {
-        setAnim(ANI.LEFT); 
-        prevAnimation = 1;
-      } else if (behavior == 2) {
-        setAnim(ANI.RIGHT); 
-        prevAnimation = 2;
+      if (this.behavior == 1) {
+        this.setAnim(Goblin.ANI.LEFT); 
+        this.prevAnimation = 1;
+      } else if (this.behavior == 2) {
+        this.setAnim(Goblin.ANI.RIGHT); 
+        this.prevAnimation = 2;
       } else {
-        if (prevAnimation == 1) {
-          setAnim(ANI.IDLE_LEFT);
+        if (this.prevAnimation == 1) {
+          this.setAnim(Goblin.ANI.IDLE_LEFT);
         } else {
-          setAnim(ANI.IDLE_RIGHT);
+          this.setAnim(Goblin.ANI.IDLE_RIGHT);
         }
       }
 
-      check = false;
+      this.check = false;
     }
-  };
+  }
 
-  // main animation loop
-  const animate = () => {
-    update()
-    requestAnimationFrame(animate);
-  };
+  remove() {
+    this.velocity[1] = -20; //Jump up
+    this.removed = true;
+    setTimeout(() => { //Destroy after 2 seconds
+      this.destroy()
+    }, 2000);
+  }
 
-  animate();// random delay
-
-  return ele;
+  destroy() {
+    this.div.remove();
+    delete goblins[this.id];
+  }
 }
+
+function animate() {
+  updateAll()
+  requestAnimationFrame(animate);
+};
+
+function updateAll()
+{
+  for (let id in goblins)
+  {
+    goblins[id].update();
+  }
+}
+
+animate();
