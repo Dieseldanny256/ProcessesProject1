@@ -6,6 +6,7 @@ let firstName = "";
 let lastName = "";
 let loginMode = "login";
 let numContacts = 0;
+let goblinized = false;
 
 function doLogin()
 {
@@ -406,14 +407,9 @@ function validateEmail()
 
 function deleteContact(id)
 {
-    //Get contact first and last name
-    let row = Array.from(document.getElementById(`row${id}`).cells);
-    let contactFirstName = row[0].innerHTML;
-    let contactLastName = row[1].innerHTML;
-
     //document.getElementById("registerResult").innerHTML = ""; //Set the result message field to nothing
 
-    let packet = {"userId":userId, "firstName":contactFirstName, "lastName":contactLastName}; //Generate a packet to send
+    let packet = {"contactId":id, "userId":userId}; //Generate a packet to send
     let jsonPayload = JSON.stringify(packet); //Generates the packet
 
     let url = urlBase + '/DeleteContacts.' + extension //generates the signUp url
@@ -436,6 +432,7 @@ function deleteContact(id)
                 //Contact was added successfully
 				document.getElementById("editResult").innerHTML = jsonObject.message;
                 loadContactData(); //Reload the contacts menu
+                removeGoblin(id);
             }
         };
         xhr.send(jsonPayload); //Send the packet
@@ -457,11 +454,18 @@ function doLogout()
 }
 
 function goblinize() {
+    if (goblinized)
+    {
+        return;
+    }
     Array.from(document.getElementById("contactTable").rows).forEach((row) =>
     {
         let row_data = Array.from(row.cells);
+        let id = parseInt(row.id.substring(3));
+        console.log(row.id.substring(3));
         let contactFirstName = row_data[0].innerHTML;
         let contactLastName = row_data[1].innerHTML;
-        CreateGoblin(5, contactFirstName + " " + contactLastName);
+        CreateGoblin(5, id, contactFirstName + " " + contactLastName);
     });
+    goblinized = true;
 }

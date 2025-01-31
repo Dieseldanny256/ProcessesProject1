@@ -1,6 +1,6 @@
 let gravity = 1;
 
-function CreateGoblin(gfx, name = "First Last") {
+function CreateGoblin(gfx, id, name = "First Last") {
   if (!gfx) {
     gfx = 'sprite';
   }
@@ -15,12 +15,14 @@ function CreateGoblin(gfx, name = "First Last") {
 
   // goblin element
   var ele = document.createElement("div");
+  ele.id = "goblin" + id;
   ele.style.position = 'fixed';
   ele.style.width = '64px';
   ele.style.height = '64px';
   document.body.appendChild(ele);
 
   // goblin's name
+  let removed = false;
   var nameBox = document.createElement("div");
   nameBox.style.position = 'absolute';
   nameBox.style.top = '-20px';
@@ -72,7 +74,7 @@ function CreateGoblin(gfx, name = "First Last") {
     y += y_vel;
 
     // keeps goblin on bottom of screen
-    if (y > window.innerHeight - 60) {
+    if (!removed && y > window.innerHeight - 60) {
       y = window.innerHeight - 60;
       y_vel = 0;
     }
