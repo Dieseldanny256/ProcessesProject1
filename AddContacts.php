@@ -48,7 +48,9 @@
     $stmt->bind_param("ssssi", $firstName, $lastName, $phone, $email, $userId);
 
     if ($stmt->execute()) {
-        returnWithSuccess("Contact added successfully");
+        // Retrieve the ID of the newly inserted contact
+        $newContactId = $conn->insert_id;
+        returnWithSuccess("Contact added successfully", $newContactId);
     } else {
         error_log("Failed to execute query: " . $stmt->error);
         returnWithError("Failed to add contact");
@@ -65,7 +67,7 @@
         return json_decode($rawData, true);
     }
 
-    // This step is to returing the result in JSON
+    // This step is to returning the result in JSON
     function sendResultInfoAsJson($obj)
     {
         header('Content-type: application/json');
@@ -80,9 +82,9 @@
     }
 
     // This step means success
-    function returnWithSuccess($message)
+    function returnWithSuccess($message, $contactId)
     {
-        $retValue = '{"message":"' . $message . '","error":""}';
+        $retValue = '{"message":"' . $message . '","contactId":' . $contactId . ',"error":""}';
         sendResultInfoAsJson($retValue);
     }
 
