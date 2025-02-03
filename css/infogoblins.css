@@ -9,50 +9,33 @@
 
 #titleBar
 {
-    display: table;
-    width: 100vw;
-    float: top;
-}
 
-#InfoGoblinLogo
-{
-    width: 140px;
-    height: 140px;
-}
-
-#GitHubLogo
-{
-    width: 140px;
-    height: 140px;
-}
-
-.titleBarImg
-{
-    display: table-cell;
     background-color: var(--background-color);
-    border-width: 3px;
-    border: var(--secondary-color);
-    padding: 10px;
-    margin: 0px;
-    width: 140px;
-    height: 140px;
+    border-bottom: var(--secondary-color);
+
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+
+    width: 100%;
+    height: 110px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+    z-index: -1;
+
 }
 
 .titleContainer
 {
-    width: 80%;
-    display: table-cell;
-    visibility: visible;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    background-color: var(--background-color);
-    border-bottom-width: 3px;
-    border-bottom: var(--secondary-color);
-    border-bottom-style: solid;
-    margin-top: 0px;
-    margin-bottom: 50px;
-    position: absolute;
-    z-index: -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .title 
@@ -76,10 +59,128 @@
     font-size: 25px;
 }
 
+.titleBarImgCont
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 140px;
+    height: 140px;
+
+    background-color: var(--background-color);
+    border: var(--secondary-color);
+
+    padding: 10px;
+    margin: 0px;
+
+    border-width: 3px;
+    border-right-style: solid;
+    border-bottom-style: solid;
+    border-bottom-right-radius: 10px;
+
+}
+
+.InfoGoblinLogo
+{
+    width: 140px;
+    height: 140px;
+}
+
+.gitImgCont
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 90px;
+    height: 90px;
+
+    background-color: var(--background-color);
+    border: var(--secondary-color);
+
+    padding: 10px;
+    margin: 0px;
+
+    border-width: 3px;
+    border-left-style: solid;
+    border-top-style: solid;
+    border-top-left-radius: 10px;
+
+}
+
+.GitHubLogo
+{
+    width: 90px;
+    height: 90px;
+}
+
+
+.buttonBar {
+    background-color: var(--background-color);
+    border-bottom: var(--secondary-color);
+
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+
+    width: 100%;
+    height: 7px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+
+    gap: 100px;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.navButton {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+
+    text-align: center;
+
+    width: 100px;
+
+    transition-duration: 0.5s;
+    
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-size: 18px;
+    font-style: normal;
+}
+
+.navButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.navButton:active {
+    transition-duration: 0s;
+    background-color: var(--accent-color-1);
+    border-color: var(--accent-color-1);
+}
+
 .loginField
 {
     display: flex;
-    margin-top: 30px;
+    margin-top: 100px;
     align-items: center;
     justify-content: center;
 }
@@ -191,6 +292,7 @@
     font-weight: 400;
     font-style: normal;
     margin-bottom: 1px;
+    text-align: center;
 }
 
 .errorText {
@@ -200,6 +302,137 @@
     font-weight: 400;
     width: 300px;
     font-style: normal;
+}
+
+/* Search Bar And buttons */
+.searchDiv {
+    display: flex;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.search {
+    /* margin: 0px auto; */
+    margin: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    text-align: center;
+    border-radius: 28px;
+    background-color: var(--background-color);
+    color: #E0E3F1;
+}
+
+#searchBar {
+    width: 300px;
+    font-size: 18px;
+    font-family: "Trykker", serif;
+    color: #E0E3F1;
+    font-weight: 400;
+    outline: none;
+    border: none;
+    background: transparent
+
+}
+
+input::placeholder {
+    color: #E0E3F1;
+}
+
+.goblinButton {
+    visibility: visible;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    margin-left: 3px;
+    margin-top: 5px;
+    padding: 3px;
+    width: 100px;
+    transition-duration: 0.5s;
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-size: 18px;
+    font-style: normal;
+}
+
+.goblinButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.goblinButton:active {
+    transition-duration: 0s;
+    background-color: var(--accent-color-1);
+    border-color: var(--accent-color-1);
+}
+
+.contactButton {
+    visibility: visible;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 5px;
+    padding: 3px;
+    width: 100px;
+    transition-duration: 0.5s;
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-size: 18px;
+    font-style: normal;
+}
+
+.contactButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.contactButton:active {
+    transition-duration: 0s;
+    background-color: var(--accent-color-1);
+    border-color: var(--accent-color-1);
+}
+
+.logoutButton {
+    visibility: visible;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border-color: var(--secondary-color);
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 5px;
+    text-align: center;
+    margin-left: 3px;
+    margin-top: 5px;
+    padding: 3px;
+    width: 100px;
+    transition-duration: 0.5s;
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-size: 18px;
+    font-style: normal;
+}
+
+.logoutButton:hover {
+    background-color: var(--secondary-color);
+}
+
+.logoutButton:active {
+    transition-duration: 0s;
+    background-color: var(--accent-color-1);
+    border-color: var(--accent-color-1);
 }
 
 .background
@@ -219,14 +452,38 @@
     display: none;
 }
 
-.contactTable {
+.contactTableCont {
+    width: 70%;
+    margin: 15px auto;
+
+    display: flex;
+    justify-content: center;
     border-collapse: collapse;
-    border: 2px solid black; 
-    padding: 5px;
+
+    overflow-x: auto;
+}
+
+/* table Structure */
+.contactTable {
+    background-color: #E0E3F1;
+    border: 2px solid var(--background-color); 
+
+    font-family: "Trykker", serif;
+    font-weight: 400;
+    font-size: 20px;
+
+    border-collapse: collapse;
+    border-collapse: collapse;
+
+    margin: auto;
+    width: 100%;
+}
+
+.contactTable td, .contactTable th {
+    padding: 10px;
+    border: 3px solid var(--background-color);
 }
 
 .tableCell {
-    border: 1px solid black;
-    padding: 5px;
-    background: var(--text-color);
+    background: var(--secondary-color);
 }
