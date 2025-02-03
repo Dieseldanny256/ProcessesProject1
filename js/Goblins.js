@@ -18,6 +18,7 @@ class Goblin {
     this.div = document.createElement("div");
     this.div.id = "goblin" + id;
     this.div.style.position = 'fixed';
+    this.div.style.zIndex = '3';
     this.div.style.width = '64px';
     this.div.style.height = '64px';
     document.body.appendChild(this.div);

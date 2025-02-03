@@ -7,6 +7,15 @@ let lastName = "";
 let loginMode = "login";
 let numContacts = 0;
 let goblinized = false;
+let disabled_contact = false;
+let disabled_login = false;
+let errorColor;
+let validColor;
+
+function loadColors() {
+    errorColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-2");
+    validColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-1");
+}
 
 function doLogin()
 {
@@ -332,11 +341,17 @@ function addContact()
                 let jsonObject = JSON.parse(xhr.responseText); //Converts the packet to an object
                 if (jsonObject.error != "") {
                     document.getElementById("editResult").innerHTML = jsonObject.error;
+                    document.getElementById("editResult").style.color = errorColor;
+                    document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
+                    document.getElementById("editResult").style.animationFillMode = "forwards";
                     switchToContactsMenu();
 					return;
                 }
                 //Contact was added successfully
 				document.getElementById("editResult").innerHTML = jsonObject.message;
+                document.getElementById("editResult").style.color = validColor;
+                document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
+                document.getElementById("editResult").style.animationFillMode = "forwards";
                 loadContactData(); //Reload the contact data
                 switchToContactsMenu();
             }
@@ -346,6 +361,8 @@ function addContact()
     catch(err)
     {
         document.getElementById("editResult").innerHTML = err.message; //Displays the error
+        document.getElementById("editResult").style.color = errorColor;
+        document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal"
         switchToContactsMenu();
     }
 }
@@ -379,12 +396,18 @@ function editContact(id)
                 if (jsonObject.error != "") {
                     document.getElementById("editResult").innerHTML = jsonObject.error;
                     switchToContactsMenu();
+                    document.getElementById("editResult").style.color = errorColor;
+                    document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
+                    document.getElementById("editResult").style.animationFillMode = "forwards";
 					return;
                 }
                 //Contact was added successfully
 				document.getElementById("editResult").innerHTML = jsonObject.message;
                 loadContactData(); //Reload the contacts menu
                 switchToContactsMenu();
+                document.getElementById("editResult").style.color = validColor;
+                document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
+                document.getElementById("editResult").style.animationFillMode = "forwards";
                 if (goblinized)
                 {
                     goblins[id].nameBox.textContent = contactFirstName + " " + contactLastName;
@@ -396,16 +419,18 @@ function editContact(id)
     catch(err)
     {
         document.getElementById("editResult").innerHTML = err.message; //Displays the error
+        document.getElementById("editResult").style.color = errorColor;
+        document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
+        document.getElementById("editResult").style.animationFillMode = "forwards";
         switchToContactsMenu();
     }
 }
 
 function validatePhoneNumber()
 {
-    var errorColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-2");
-
     //Validation of phone number
     let phoneRegex = /^[0-9]{10}$/;
+    let emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
     if (!phoneRegex.test(document.getElementById("phoneNumber").value))
     {
         document.getElementById("phoneNumber").style.borderColor = errorColor;
@@ -413,26 +438,35 @@ function validatePhoneNumber()
     }
     else
     {
-        document.getElementById("submitButton").disabled = false;
         document.getElementById("phoneNumber").style.borderColor = null;
+    }
+
+    if (phoneRegex.test(document.getElementById("phoneNumber").value) &&
+            emailRegex.test(document.getElementById("email").value))
+    {
+        document.getElementById("submitButton").disabled = false;
     }
 }
 
 function validateEmail()
 {
-    var errorColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-2");
-
     //Validation of email
+    let phoneRegex = /^[0-9]{10}$/;
     let emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
     if (!emailRegex.test(document.getElementById("email").value))
     {
         document.getElementById("email").style.borderColor = errorColor;
         document.getElementById("submitButton").disabled = true;
     }
-    else
+    else 
+    {
+        document.getElementById("email").style.borderColor = null;
+    }
+
+    if (phoneRegex.test(document.getElementById("phoneNumber").value) &&
+            emailRegex.test(document.getElementById("email").value))
     {
         document.getElementById("submitButton").disabled = false;
-        document.getElementById("email").style.borderColor = null;
     }
 }
 
@@ -458,10 +492,16 @@ function deleteContact(id)
                 let jsonObject = JSON.parse(xhr.responseText); //Converts the packet to an object
                 if (jsonObject.error != "") {
                     document.getElementById("editResult").innerHTML = jsonObject.error;
+                    document.getElementById("editResult").style.color = errorColor;
+                    document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
+                    document.getElementById("editResult").style.animationFillMode = "forwards";
 					return;
                 }
-                //Contact was added successfully
+                //Contact was deleted successfully
 				document.getElementById("editResult").innerHTML = jsonObject.message;
+                document.getElementById("editResult").style.color = validColor;
+                document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
+                document.getElementById("editResult").style.animationFillMode = "forwards";
                 loadContactData(); //Reload the contacts menu
                 if (goblinized) goblins[id].remove();
             }
@@ -471,6 +511,9 @@ function deleteContact(id)
     catch(err)
     {
         document.getElementById("editResult").innerHTML = err.message; //Displays the error
+        document.getElementById("editResult").style.color = errorColor;
+        document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
+        document.getElementById("editResult").style.animationFillMode = "forwards";
     }
 }
 
