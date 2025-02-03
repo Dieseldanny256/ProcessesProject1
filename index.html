@@ -1,6 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Login/Register Page">
+    <meta name="author" content="Danny and Jacob">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infogoblins Contact Manager</title>
     <link rel="icon" href="images/InfoGoblinRecolor.png" type="image/icon type">
     <script type = "text/javascript" src = "js/infogoblins.js"></script>
@@ -10,20 +14,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Trykker&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
-    <script>
-        window.addEventListener('resize', function(event) {
-            let images_width = document.getElementById("InfoGoblinLogo").offsetWidth + 
-                document.getElementById("GitHubLogo").offsetWidth;
-            let percent = Math.floor((1 - (images_width / window.innerWidth))*100);
-            document.getElementById("titleContainer").style.width = `${percent}%`;
-        }, false);
-        document.addEventListener('DOMContentLoaded', function () {
-			let images_width = document.getElementById("InfoGoblinLogo").offsetWidth + 
-                document.getElementById("GitHubLogo").offsetWidth;
-            let percent = Math.floor((1 - (images_width / window.innerWidth))*100);
-            document.getElementById("titleContainer").style.width = `${percent}%`;
-		}, false);
-    </script>
 </head>
 
 <body class = "background">
@@ -36,11 +26,11 @@
     </div>
 
     <div class="titleBarImgCont">
-        <a href="index.html"><img src="images/InfoGoblinRecolor.png" class="InfoGoblinLogo"></a>
+        <a href="index.html"><img src="images/InfoGoblinRecolor.png" class="InfoGoblinLogo" alt="GoblinLogo" id="InfoGoblinLogo"></a>
     </div>
 
     <div class="gitImgCont">
-        <a href="https://github.com/Dieseldanny256/ProcessesProject1"><img src="images/github-mark-white.png" class="GitHubLogo"></a>
+        <a href="https://github.com/Dieseldanny256/ProcessesProject1"><img src="images/github-mark-white.png" class="GitHubLogo" alt="GitLogo" id="GitHubLogo"></a>
     </div>
     
     <div id="Login" class="loginField">
