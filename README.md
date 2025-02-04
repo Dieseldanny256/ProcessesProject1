@@ -3,7 +3,7 @@
 Infogoblins is an advanced, state-of-the-art contact manager that lets people all around the world stay connected 
 (or so we hope) designed for Processes of Object Oriented Software Spring 2025.
 
-Check out the site: http://infogoblins.zyx.
+Check out the site: http://infogoblins.xyz.
 
 # Contributors
 [Daniel Bakos](https://github.com/Dieseldanny256) <br>
