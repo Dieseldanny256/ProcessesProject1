@@ -209,6 +209,11 @@ function loadContactData()
                 if (jsonObject.error != "") {
                     //Add error text here
                     document.getElementById("contactTable").innerHTML = tableData;
+                    if (jsonObject.error === "No Records Found")
+                    {
+                        document.getElementById("contactTableDiv").classList.add("hidden");
+                        document.getElementById("noContactsDiv").classList.remove("hidden");
+                    }
                     if (goblinized)
                         {
                             //Hide all goblins
@@ -221,6 +226,9 @@ function loadContactData()
                 } 
                 
                 //Contacts were loaded sucessfully
+                document.getElementById("contactTableDiv").classList.remove("hidden");
+                document.getElementById("noContactsDiv").classList.add("hidden");
+
                 //For each contact in the results array
                 jsonObject.results.sort(function(a, b){return a.FirstName.localeCompare(b.FirstName)});
                 numContacts = jsonObject.results.length
@@ -236,7 +244,7 @@ function loadContactData()
                     tableData += 
                     `<td class="tableCell">
                         <button type="button" id="editRow${jsonObject.results[i].ID}" onClick="switchToEditContact(${jsonObject.results[i].ID});">Edit</button>
-                        <button type="button" id="deleteRow${jsonObject.results[i].ID}" onClick="deleteContact(${jsonObject.results[i].ID});">Delete</button>
+                        <button type="button" id="deleteRow${jsonObject.results[i].ID}" onClick="showDeleteConfirm(${jsonObject.results[i].ID});">Delete</button>
                     </td></tr>`
                 }
 
@@ -271,6 +279,20 @@ function loadContactData()
     }
 }
 
+function showDeleteConfirm(id)
+{
+    document.getElementById("confirmDeleteButton").onclick = function() {deleteContact(id); hideDeleteConfirm();};
+    document.getElementById("deleteConfirm").style.display = "block";
+    let row = Array.from(document.getElementById(`row${id}`).cells);
+    let contactName = row[0].innerHTML + " " + row[1].innerHTML;
+    document.getElementById("deleteConfirmMsg").innerHTML = contactName + " will be deleted forever! Are you sure about this?"
+}
+
+function hideDeleteConfirm()
+{
+    document.getElementById("deleteConfirm").style.display = "none";
+}
+
 function switchToAddContact()
 {
     document.getElementById("contactsMenu").classList.add("hidden");
@@ -303,14 +325,16 @@ function switchToEditContact(id)
     document.getElementById("lastName").value = row[1].innerHTML;
     document.getElementById("phoneNumber").value = phone_num;
     document.getElementById("email").value = row[3].innerHTML;
-    document.getElementById("phoneNumber").style.borderColor = null;
-    document.getElementById("email").style.borderColor = null;
 }
 
 function switchToContactsMenu() 
 {
     document.getElementById("contactsMenu").classList.remove("hidden");
     document.getElementById("editContactsMenu").classList.add("hidden");
+    document.getElementById("phoneNumber").style.borderColor = null;
+    document.getElementById("email").style.borderColor = null;
+    document.getElementById("phoneError").innerHTML = "";
+    document.getElementById("emailError").innerHTML = "";
 }
 
 function addContact()
@@ -342,16 +366,16 @@ function addContact()
                 if (jsonObject.error != "") {
                     document.getElementById("editResult").innerHTML = jsonObject.error;
                     document.getElementById("editResult").style.color = errorColor;
-                    document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
-                    document.getElementById("editResult").style.animationFillMode = "forwards";
+                    fadeResult();
                     switchToContactsMenu();
 					return;
                 }
                 //Contact was added successfully
 				document.getElementById("editResult").innerHTML = jsonObject.message;
                 document.getElementById("editResult").style.color = validColor;
-                document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
-                document.getElementById("editResult").style.animationFillMode = "forwards";
+                fadeResult();
+                if (goblinized) goblins[jsonObject.contactId] = new Goblin(jsonObject.contactId, 
+                    contactFirstName, contactLastName);
                 loadContactData(); //Reload the contact data
                 switchToContactsMenu();
             }
@@ -361,8 +385,7 @@ function addContact()
     catch(err)
     {
         document.getElementById("editResult").innerHTML = err.message; //Displays the error
-        document.getElementById("editResult").style.color = errorColor;
-        document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal"
+        fadeResult();
         switchToContactsMenu();
     }
 }
@@ -397,8 +420,7 @@ function editContact(id)
                     document.getElementById("editResult").innerHTML = jsonObject.error;
                     switchToContactsMenu();
                     document.getElementById("editResult").style.color = errorColor;
-                    document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
-                    document.getElementById("editResult").style.animationFillMode = "forwards";
+                    fadeResult();
 					return;
                 }
                 //Contact was added successfully
@@ -406,8 +428,7 @@ function editContact(id)
                 loadContactData(); //Reload the contacts menu
                 switchToContactsMenu();
                 document.getElementById("editResult").style.color = validColor;
-                document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
-                document.getElementById("editResult").style.animationFillMode = "forwards";
+                fadeResult();
                 if (goblinized)
                 {
                     goblins[id].nameBox.textContent = contactFirstName + " " + contactLastName;
@@ -420,8 +441,7 @@ function editContact(id)
     {
         document.getElementById("editResult").innerHTML = err.message; //Displays the error
         document.getElementById("editResult").style.color = errorColor;
-        document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
-        document.getElementById("editResult").style.animationFillMode = "forwards";
+        fadeResult();
         switchToContactsMenu();
     }
 }
@@ -435,10 +455,12 @@ function validatePhoneNumber()
     {
         document.getElementById("phoneNumber").style.borderColor = errorColor;
         document.getElementById("submitButton").disabled = true;
+        document.getElementById("phoneError").innerHTML = "Phone number should be 10 digits!";
     }
     else
     {
         document.getElementById("phoneNumber").style.borderColor = null;
+        document.getElementById("phoneError").innerHTML = "";
     }
 
     if (phoneRegex.test(document.getElementById("phoneNumber").value) &&
@@ -457,10 +479,12 @@ function validateEmail()
     {
         document.getElementById("email").style.borderColor = errorColor;
         document.getElementById("submitButton").disabled = true;
+        document.getElementById("emailError").innerHTML = "Please enter a valid email!";
     }
     else 
     {
         document.getElementById("email").style.borderColor = null;
+        document.getElementById("emailError").innerHTML = "";
     }
 
     if (phoneRegex.test(document.getElementById("phoneNumber").value) &&
@@ -468,6 +492,13 @@ function validateEmail()
     {
         document.getElementById("submitButton").disabled = false;
     }
+}
+
+function fadeResult()
+{
+    document.getElementById("editResult").classList.remove("fade");
+    document.getElementById("editResult").offsetHeight;
+    document.getElementById("editResult").classList.add("fade");
 }
 
 function deleteContact(id)
@@ -493,15 +524,13 @@ function deleteContact(id)
                 if (jsonObject.error != "") {
                     document.getElementById("editResult").innerHTML = jsonObject.error;
                     document.getElementById("editResult").style.color = errorColor;
-                    document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
-                    document.getElementById("editResult").style.animationFillMode = "forwards";
+                    fadeResult();
 					return;
                 }
                 //Contact was deleted successfully
 				document.getElementById("editResult").innerHTML = jsonObject.message;
                 document.getElementById("editResult").style.color = validColor;
-                document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
-                document.getElementById("editResult").style.animationFillMode = "forwards";
+                fadeResult();
                 loadContactData(); //Reload the contacts menu
                 if (goblinized) goblins[id].remove();
             }
@@ -511,9 +540,7 @@ function deleteContact(id)
     catch(err)
     {
         document.getElementById("editResult").innerHTML = err.message; //Displays the error
-        document.getElementById("editResult").style.color = errorColor;
-        document.getElementById("editResult").style.animation = "fade 1s linear 2s 1 normal";
-        document.getElementById("editResult").style.animationFillMode = "forwards";
+        fadeResult();
     }
 }
 
@@ -530,6 +557,13 @@ function doLogout()
 function goblinize() {
     if (goblinized)
     {
+        for (goblinId in goblins)
+        {
+            goblins[goblinId].remove();
+        }
+        goblinized = false;
+        document.getElementById("InfoGoblinLogo").src = "images/InfoGoblinRecolor.png";
+        document.getElementById("goblinButton").innerHTML = "Regoblinize";
         return;
     }
 
@@ -558,6 +592,8 @@ function goblinize() {
                         jsonObject.results[i].FirstName, jsonObject.results[i].LastName);
                 }
                 goblinized = true;
+                document.getElementById("InfoGoblinLogo").src = "images/InfoGoblinOpen.png";
+                document.getElementById("goblinButton").innerHTML = "Degoblinize";
             }
         };
         xhr.send(jsonPayload); //Send the packet

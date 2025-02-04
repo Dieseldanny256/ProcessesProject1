@@ -32,7 +32,7 @@ class Goblin {
     this.nameBox.style.color = window.getComputedStyle(document.body).getPropertyValue("--text-color");
     this.nameBox.textContent = firstName + " " + lastName;
     this.nameBox.style.textAlign = 'center';
-    this.nameBox.style.whiteSpace = 'nowrap'; 
+    this.nameBox.style.whiteSpace = 'nowrap';
     this.nameBox.style.background = window.getComputedStyle(document.body).getPropertyValue("--background-color");
     this.nameBox.style.borderRadius = '5px';
     this.nameBox.style.padding = '3px';
@@ -75,6 +75,9 @@ class Goblin {
     if (!this.removed && this.position[1] > window.innerHeight - 60) {
       this.position[1] = window.innerHeight - 60;
       this.velocity[1] = 0;
+    }
+    else if (this.removed && this.position[1] > window.innerHeight) {
+      this.destroy();
     }
     this.div.style.top = `${this.position[1]}px`;
 
@@ -124,11 +127,8 @@ class Goblin {
   }
 
   remove() {
-    this.velocity[1] = -20; //Jump up
+    this.velocity[1] = -10 * Math.random() - 10; //Jump up
     this.removed = true;
-    setTimeout(() => { //Destroy after 2 seconds
-      this.destroy()
-    }, 2000);
   }
 
   destroy() {
