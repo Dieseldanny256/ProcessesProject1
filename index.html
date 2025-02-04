@@ -1,45 +1,69 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Login/Register Page">
+    <meta name="author" content="Danny and Jacob">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infogoblins Contact Manager</title>
     <link rel="icon" href="images/InfoGoblinRecolor.png" type="image/icon type">
     <script type = "text/javascript" src = "js/infogoblins.js"></script>
     <link rel="stylesheet" href="css/infogoblins.css"/>
+    <link rel="stylesheet" href="https://use.typekit.net/tge5jxx.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Trykker&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
+
 <body class = "background">
+
     <div id="titleBar">
-        <img src="images/InfoGoblinRecolor.png" id="InfoGoblinLogo">
-        <div class="titleContainer">
+        <div class="titleContainer"id="titleContainer">
             <h1 class="title">Infogoblins</h1>
             <div class="subtitle">Contact Manager</div>
         </div>
     </div>
+
+    <div class="titleBarImgCont">
+        <a href="index.html"><img src="images/InfoGoblinRecolor.png" class="InfoGoblinLogo" alt="GoblinLogo" id="InfoGoblinLogo"></a>
+    </div>
+
+    <div class="gitImgCont">
+        <a href="https://github.com/Dieseldanny256/ProcessesProject1"><img src="images/github-mark-white.png" class="GitHubLogo" alt="GitLogo" id="GitHubLogo"></a>
+    </div>
+    
     <div id="Login" class="loginField">
-        <div><span id="inner-title" class="loginSectionTitle">Login:</span></div>
-        <div><input type="text" id="loginName" class="textField" placeholder="Username" /></div>
-        <div><input type="password" id="loginPassword" class="textField" placeholder="Password"/></div>
-        <div><button type="button" id="loginButton" class="loginButton" onclick="doLogin();"> Login </button></div>
-        <div><span id="loginResult" class="errorText"></span></div>
-        <div style="position:fixed; bottom: 0; margin-bottom: 5%;">
-            <span class="loginSectionTitle" style="font-size:18px;">Don't have an account?</span><br/>
-            <button type="button" id="registerModeButton" class="loginButton" onclick="switchToRegister();"> Register </button>
+        <div style="display: block;">
+            <div class="loginContainer">
+                <div><span id="inner-title" class="sectionTitle">Login:</span></div>
+                <div><input type="text" id="loginName" class="textField" placeholder="Username" /></div>
+                <div><input type="password" id="loginPassword" class="textField" placeholder="Password"/></div>
+                <div><button type="button" id="loginButton" class="loginButton" onclick="doLogin();"> Login </button></div>
+                <div><span id="loginResult" class="errorText"></span></div>
+            </div>
+            <div style="margin-top: 20%;">
+                <span class="text">Don't have an account?</span><br/>
+                <button type="button" id="registerModeButton" class="loginButton" onclick="switchToRegister();"> Register </button>
+            </div>
         </div>
     </div>
+
     <div id="Register" class="loginField hidden">
-        <div><span id="inner-title" class="loginSectionTitle">Register:</span></div>
-        <div><input type="text" id="firstName" class="textField" placeholder="First Name"/></div>
-        <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
-        <div><input type="text" id="registerName" class="textField" placeholder="Username" /></div>
-        <div><input type="password" id="registerPassword" class="textField" placeholder="Password"/></div>
-        <div><button type="button" id="registerButton" class="loginButton" onclick="doSignUp();"> Register </button></div>
-        <div><span id="registerResult" class="errorText"></span></div>
-        <div style="position:fixed; bottom: 0; margin-bottom: 5%;">
-            <span class="loginSectionTitle" style="font-size:18px;">Already a member?</span><br/>
-            <div><button type="button" id="loginModeButton" class="loginButton" onclick="switchToLogin();" visible="false"> Login </button></div>
+        <div style="display: block;">
+            <div class="registerContainer">
+                <div><span id="inner-title" class="sectionTitle">Register:</span></div>
+                <div><input type="text" id="firstName" class="textField" placeholder="First Name"/></div>
+                <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
+                <div><input type="text" id="registerName" class="textField" placeholder="Username" /></div>
+                <div><input type="password" id="registerPassword" class="textField" placeholder="Password"/></div>
+                <div><button type="button" id="registerButton" class="loginButton" onclick="doSignUp();"> Register </button></div>
+                <div><span id="registerResult" class="errorText"></span></div>
+            </div>
+            <div style="margin-top: 20%;">
+                <span class="text">Already a member?</span><br/>
+                <div><button type="button" id="loginModeButton" class="loginButton" onclick="switchToLogin();" visible="false"> Login </button></div>
+            </div>
         </div>
     </div>
 </body>

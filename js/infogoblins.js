@@ -5,6 +5,17 @@ let userId = 0;
 let firstName = "";
 let lastName = "";
 let loginMode = "login";
+let numContacts = 0;
+let goblinized = false;
+let disabled_contact = false;
+let disabled_login = false;
+let errorColor;
+let validColor;
+
+function loadColors() {
+    errorColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-2");
+    validColor = window.getComputedStyle(document.body).getPropertyValue("--accent-color-1");
+}
 
 function doLogin()
 {
@@ -177,10 +188,169 @@ function readCookie()
 
 function loadContactData()
 {
-    let packet = {"search":"", "lastName":newLastName}; //Generate a packet to send (search for empty string)
+    let search_string = document.getElementById("searchBar").value;
+    let packet = {"search":search_string, "userId":userId}; //Generate a packet to send (search for empty string)
     let jsonPayload = JSON.stringify(packet); //Generates the packet
 
-    let url = urlBase + '/SignUp.' + extension //generates the signUp url
+    let url = urlBase + '/SearchContacts.' + extension //generates the signUp url
+
+    let xhr = new XMLHttpRequest(); //Generates a new HttpRequest object
+    xhr.open("POST", url, true); //Initializes the xhr module for requests
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    try
+    {
+        //Called when the packet is recieved
+        xhr.onreadystatechange = function()
+        {
+            if (this.readyState == 4 && this.status == 200)
+            {
+                let tableData = "";
+                let jsonObject = JSON.parse(xhr.responseText); //Converts the packet to an object
+                if (jsonObject.error != "") {
+                    //Add error text here
+                    document.getElementById("contactTable").innerHTML = tableData;
+                    if (jsonObject.error === "No Records Found")
+                    {
+                        document.getElementById("contactTableDiv").classList.add("hidden");
+                        document.getElementById("noContactsDiv").classList.remove("hidden");
+                    }
+                    if (goblinized)
+                        {
+                            //Hide all goblins
+                            for (let goblinID in goblins)
+                            {
+                                goblins[goblinID].div.classList.add("hidden");
+                            }
+                        }
+					return;
+                } 
+                
+                //Contacts were loaded sucessfully
+                document.getElementById("contactTableDiv").classList.remove("hidden");
+                document.getElementById("noContactsDiv").classList.add("hidden");
+
+                //For each contact in the results array
+                jsonObject.results.sort(function(a, b){return a.FirstName.localeCompare(b.FirstName)});
+                numContacts = jsonObject.results.length
+				for (let i = 0; i < numContacts; i++) {
+                    //Name
+                    tableData += `<tr id=row${jsonObject.results[i].ID}><td class="tableCell" style="border-right:none;">${jsonObject.results[i].FirstName}</td>`
+                    tableData += `<td class="tableCell" style="border-left:none;">${jsonObject.results[i].LastName}</td>`
+                    //Phone
+                    let phone_num = jsonObject.results[i].Phone.toString();
+                    tableData += `<td class="tableCell">(${phone_num.substring(0, 3)}) ${phone_num.substring(3, 6)}-${phone_num.substring(6)}</td>`
+                    //Email
+                    tableData += `<td class="tableCell">${jsonObject.results[i].Email}</td>`
+                    tableData += 
+                    `<td class="tableCell">
+                        <button type="button" id="editRow${jsonObject.results[i].ID}" onClick="switchToEditContact(${jsonObject.results[i].ID});">Edit</button>
+                        <button type="button" id="deleteRow${jsonObject.results[i].ID}" onClick="showDeleteConfirm(${jsonObject.results[i].ID});">Delete</button>
+                    </td></tr>`
+                }
+
+                document.getElementById("contactTable").innerHTML = tableData;
+
+                if (goblinized)
+                {
+                    //Check for changes
+                    for (let goblinID in goblins)
+                    {
+                        let found = false;
+                        for (let contact of jsonObject.results)
+                        {
+                            if (contact.ID == goblinID)
+                            {
+                                found = true;
+                                goblins[goblinID].div.classList.remove("hidden");
+                                break;
+                            }
+                        }
+                        if (!found && !goblins[goblinID].removed) goblins[goblinID].div.classList.add("hidden");
+                    }
+                }
+            }
+        };
+        xhr.send(jsonPayload); //Send the packet
+    }
+    catch(err)
+    {
+        //Displays the error
+        document.getElementById("contactTable").innerHTML = "";
+    }
+}
+
+function showDeleteConfirm(id)
+{
+    document.getElementById("confirmDeleteButton").onclick = function() {deleteContact(id); hideDeleteConfirm();};
+    document.getElementById("deleteConfirm").style.display = "block";
+    let row = Array.from(document.getElementById(`row${id}`).cells);
+    let contactName = row[0].innerHTML + " " + row[1].innerHTML;
+    document.getElementById("deleteConfirmMsg").innerHTML = contactName + " will be deleted forever! Are you sure about this?"
+}
+
+function hideDeleteConfirm()
+{
+    document.getElementById("deleteConfirm").style.display = "none";
+}
+
+function switchToAddContact()
+{
+    document.getElementById("contactsMenu").classList.add("hidden");
+    document.getElementById("editContactsMenu").classList.remove("hidden");
+    document.getElementById("submitButton").innerHTML = "Add";
+    document.getElementById("submitButton").onclick = function() {addContact();};
+    document.getElementById("editContactTitle").innerHTML = "Add Contact:";
+    document.getElementById("firstName").value = "";
+    document.getElementById("lastName").value = "";
+    document.getElementById("phoneNumber").value = "";
+    document.getElementById("email").value = "";
+}
+
+function switchToEditContact(id)
+{
+    document.getElementById("contactsMenu").classList.add("hidden");
+    document.getElementById("editContactsMenu").classList.remove("hidden");
+    document.getElementById("submitButton").innerHTML = "Save Changes";
+    document.getElementById("submitButton").onclick = function() {editContact(id);}
+    document.getElementById("editContactTitle").innerHTML = "Edit Contact:";
+    document.getElementById("phoneNumber").style.borderColor = null;
+    document.getElementById("email").style.borderColor = null;
+
+    //Load in the current data:
+    let row = Array.from(document.getElementById(`row${id}`).cells); //Gets the data in all the rows
+    row = row.slice(0, 4);
+    phone_num = row[2].innerHTML.substring(1, 4) + row[2].innerHTML.substring(6, 9) + row[2].innerHTML.substring(10);
+
+    document.getElementById("firstName").value = row[0].innerHTML;
+    document.getElementById("lastName").value = row[1].innerHTML;
+    document.getElementById("phoneNumber").value = phone_num;
+    document.getElementById("email").value = row[3].innerHTML;
+}
+
+function switchToContactsMenu() 
+{
+    document.getElementById("contactsMenu").classList.remove("hidden");
+    document.getElementById("editContactsMenu").classList.add("hidden");
+    document.getElementById("phoneNumber").style.borderColor = null;
+    document.getElementById("email").style.borderColor = null;
+    document.getElementById("phoneError").innerHTML = "";
+    document.getElementById("emailError").innerHTML = "";
+}
+
+function addContact()
+{
+    //Get values from field
+    let contactFirstName = document.getElementById("firstName").value;
+    let contactLastName = document.getElementById("lastName").value;
+    let phoneNum = document.getElementById("phoneNumber").value;
+    let email = document.getElementById("email").value;
+
+    //document.getElementById("registerResult").innerHTML = ""; //Set the result message field to nothing
+
+    let packet = {"firstName":contactFirstName, "lastName":contactLastName, "phone":phoneNum, "email":email, "userId":userId}; //Generate a packet to send
+    let jsonPayload = JSON.stringify(packet); //Generates the packet
+
+    let url = urlBase + '/AddContacts.' + extension //generates the signUp url
 
     let xhr = new XMLHttpRequest(); //Generates a new HttpRequest object
     xhr.open("POST", url, true); //Initializes the xhr module for requests
@@ -194,25 +364,183 @@ function loadContactData()
             {
                 let jsonObject = JSON.parse(xhr.responseText); //Converts the packet to an object
                 if (jsonObject.error != "") {
-                    document.getElementById("registerResult").innerHTML = jsonObject.error;
+                    document.getElementById("editResult").innerHTML = jsonObject.error;
+                    document.getElementById("editResult").style.color = errorColor;
+                    fadeResult();
+                    switchToContactsMenu();
 					return;
                 }
-				userId = jsonObject.results[0].id; //sets the userId to this newly obtained userId 
-                
-                //Registration was valid
-				firstName = newFirstName;
-				lastName = newLastName;
-
-				saveCookie(); //Saves the cookie (whatever that means)
-                
-				window.location.href = "contacts.html"; //Redirects to the main page
+                //Contact was added successfully
+				document.getElementById("editResult").innerHTML = jsonObject.message;
+                document.getElementById("editResult").style.color = validColor;
+                fadeResult();
+                if (goblinized) goblins[jsonObject.contactId] = new Goblin(jsonObject.contactId, 
+                    contactFirstName, contactLastName);
+                loadContactData(); //Reload the contact data
+                switchToContactsMenu();
             }
         };
         xhr.send(jsonPayload); //Send the packet
     }
     catch(err)
     {
-        document.getElementById("registerResult").innerHTML = err.message; //Displays the error
+        document.getElementById("editResult").innerHTML = err.message; //Displays the error
+        fadeResult();
+        switchToContactsMenu();
+    }
+}
+
+function editContact(id)
+{
+    //Get values from field
+    let contactFirstName = document.getElementById("firstName").value;
+    let contactLastName = document.getElementById("lastName").value;
+    let phoneNum = document.getElementById("phoneNumber").value;
+    let email = document.getElementById("email").value;
+
+    //document.getElementById("registerResult").innerHTML = ""; //Set the result message field to nothing
+
+    let packet = {"id":id, "newFirstName":contactFirstName, "newLastName":contactLastName, "phone":phoneNum, "email":email}; //Generate a packet to send
+    let jsonPayload = JSON.stringify(packet); //Generates the packet
+
+    let url = urlBase + '/UpdateContacts.' + extension //generates the signUp url
+
+    let xhr = new XMLHttpRequest(); //Generates a new HttpRequest object
+    xhr.open("POST", url, true); //Initializes the xhr module for requests
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    try
+    {
+        //Called when the packet is recieved
+        xhr.onreadystatechange = function()
+        {
+            if (this.readyState == 4 && this.status == 200)
+            {
+                let jsonObject = JSON.parse(xhr.responseText); //Converts the packet to an object
+                if (jsonObject.error != "") {
+                    document.getElementById("editResult").innerHTML = jsonObject.error;
+                    switchToContactsMenu();
+                    document.getElementById("editResult").style.color = errorColor;
+                    fadeResult();
+					return;
+                }
+                //Contact was added successfully
+				document.getElementById("editResult").innerHTML = jsonObject.message;
+                loadContactData(); //Reload the contacts menu
+                switchToContactsMenu();
+                document.getElementById("editResult").style.color = validColor;
+                fadeResult();
+                if (goblinized)
+                {
+                    goblins[id].nameBox.textContent = contactFirstName + " " + contactLastName;
+                }
+            }
+        };
+        xhr.send(jsonPayload); //Send the packet
+    }
+    catch(err)
+    {
+        document.getElementById("editResult").innerHTML = err.message; //Displays the error
+        document.getElementById("editResult").style.color = errorColor;
+        fadeResult();
+        switchToContactsMenu();
+    }
+}
+
+function validatePhoneNumber()
+{
+    //Validation of phone number
+    let phoneRegex = /^[0-9]{10}$/;
+    let emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+    if (!phoneRegex.test(document.getElementById("phoneNumber").value))
+    {
+        document.getElementById("phoneNumber").style.borderColor = errorColor;
+        document.getElementById("submitButton").disabled = true;
+        document.getElementById("phoneError").innerHTML = "Phone number should be 10 digits!";
+    }
+    else
+    {
+        document.getElementById("phoneNumber").style.borderColor = null;
+        document.getElementById("phoneError").innerHTML = "";
+    }
+
+    if (phoneRegex.test(document.getElementById("phoneNumber").value) &&
+            emailRegex.test(document.getElementById("email").value))
+    {
+        document.getElementById("submitButton").disabled = false;
+    }
+}
+
+function validateEmail()
+{
+    //Validation of email
+    let phoneRegex = /^[0-9]{10}$/;
+    let emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+    if (!emailRegex.test(document.getElementById("email").value))
+    {
+        document.getElementById("email").style.borderColor = errorColor;
+        document.getElementById("submitButton").disabled = true;
+        document.getElementById("emailError").innerHTML = "Please enter a valid email!";
+    }
+    else 
+    {
+        document.getElementById("email").style.borderColor = null;
+        document.getElementById("emailError").innerHTML = "";
+    }
+
+    if (phoneRegex.test(document.getElementById("phoneNumber").value) &&
+            emailRegex.test(document.getElementById("email").value))
+    {
+        document.getElementById("submitButton").disabled = false;
+    }
+}
+
+function fadeResult()
+{
+    document.getElementById("editResult").classList.remove("fade");
+    document.getElementById("editResult").offsetHeight;
+    document.getElementById("editResult").classList.add("fade");
+}
+
+function deleteContact(id)
+{
+    //document.getElementById("registerResult").innerHTML = ""; //Set the result message field to nothing
+
+    let packet = {"contactId":id, "userId":userId}; //Generate a packet to send
+    let jsonPayload = JSON.stringify(packet); //Generates the packet
+
+    let url = urlBase + '/DeleteContacts.' + extension //generates the signUp url
+
+    let xhr = new XMLHttpRequest(); //Generates a new HttpRequest object
+    xhr.open("POST", url, true); //Initializes the xhr module for requests
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    try
+    {
+        //Called when the packet is recieved
+        xhr.onreadystatechange = function()
+        {
+            if (this.readyState == 4 && this.status == 200)
+            {
+                let jsonObject = JSON.parse(xhr.responseText); //Converts the packet to an object
+                if (jsonObject.error != "") {
+                    document.getElementById("editResult").innerHTML = jsonObject.error;
+                    document.getElementById("editResult").style.color = errorColor;
+                    fadeResult();
+					return;
+                }
+                //Contact was deleted successfully
+				document.getElementById("editResult").innerHTML = jsonObject.message;
+                document.getElementById("editResult").style.color = validColor;
+                fadeResult();
+                loadContactData(); //Reload the contacts menu
+                if (goblinized) goblins[id].remove();
+            }
+        };
+        xhr.send(jsonPayload); //Send the packet
+    }
+    catch(err)
+    {
+        document.getElementById("editResult").innerHTML = err.message; //Displays the error
+        fadeResult();
     }
 }
 
@@ -227,7 +555,51 @@ function doLogout()
 }
 
 function goblinize() {
-    for (let i = 0; i < 10; i++) {
-        CreateGoblin();
+    if (goblinized)
+    {
+        for (goblinId in goblins)
+        {
+            goblins[goblinId].remove();
+        }
+        goblinized = false;
+        document.getElementById("InfoGoblinLogo").src = "images/InfoGoblinRecolor.png";
+        document.getElementById("goblinButton").innerHTML = "Regoblinize";
+        return;
+    }
+
+    let packet = {"search":"", "userId":userId}; //Generate a packet to send (search for empty string)
+    let jsonPayload = JSON.stringify(packet); //Generates the packet
+
+    let url = urlBase + '/SearchContacts.' + extension //generates the signUp url
+
+    let xhr = new XMLHttpRequest(); //Generates a new HttpRequest object
+    xhr.open("POST", url, true); //Initializes the xhr module for requests
+    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+    try
+    {
+        //Called when the packet is recieved
+        xhr.onreadystatechange = function()
+        {
+            if (this.readyState == 4 && this.status == 200)
+            {
+                let jsonObject = JSON.parse(xhr.responseText); //Converts the packet to an object
+                if (jsonObject.error != "") return;
+                
+                //Contacts were loaded sucessfully
+                //For each contact in the results array
+				for (let i = 0; i < numContacts; i++) {
+                    goblins[jsonObject.results[i].ID] = new Goblin(jsonObject.results[i].ID, 
+                        jsonObject.results[i].FirstName, jsonObject.results[i].LastName);
+                }
+                goblinized = true;
+                document.getElementById("InfoGoblinLogo").src = "images/InfoGoblinOpen.png";
+                document.getElementById("goblinButton").innerHTML = "Degoblinize";
+            }
+        };
+        xhr.send(jsonPayload); //Send the packet
+    }
+    catch(err)
+    {
+        //Displays the error
     }
 }
