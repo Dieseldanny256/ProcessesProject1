@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="description" content="About Page">
+        <meta name="author" content="Jacob">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Infogoblins Contact Manager About Page</title>
+        <link rel="icon" href="images/InfoGoblinRecolor.png" type="image/icon type">
+        <link rel="preload" href="images/infogoblinsBg.jpg" as="image">
+        <link rel="stylesheet" href="css/infogoblins.css"/>
+        <script type = "text/javascript" src = "js/infogoblins.js"></script>
+        <link rel="stylesheet" href="https://use.typekit.net/tge5jxx.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Trykker&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
+        <script type="text/javascript">
+		    document.addEventListener('DOMContentLoaded', function () {
+			    readCookie();
+                loadContactData();
+                loadColors();
+                document.getElementById("searchBar").addEventListener("keyup", function() 
+                {
+                    loadContactData();
+                }, false);
+                document.getElementById("phoneNumber").addEventListener("keyup", function() 
+                {
+                    validatePhoneNumber();
+                }, false);
+                document.getElementById("email").addEventListener("keyup", function() 
+                {
+                    validateEmail();
+                }, false);
+		    }, false);
+	    </script>
+        <script src="js/Goblins.js"></script>
+    </head>
+
+    <body class = "background">
+        
+        <div id="titleBar">
+            <div class="titleContainer"id="titleContainer">
+                <h1 class="title">Infogoblins</h1>
+                <div class="subtitle">Contact Manager</div>
+            </div>
+        </div>
+        
+        <div class="titleBarImgCont">
+            <a href="index.html"><img src="images/InfoGoblinRecolor.png" class="InfoGoblinLogo" alt="GoblinLogo" id="InfoGoblinLogo"></a>
+        </div>
+    
+        <div class="gitImgCont">
+            <a href="https://github.com/Dieseldanny256/ProcessesProject1"><img src="images/github-mark-white.png" class="GitHubLogo" alt="GitLogo" id="GitHubLogo"></a>
+        </div>
+        
+        <div class="buttonBar">
+            <button class="contactPageButton" type="button" id="contactButton" onclick="window.location.href='contacts.html';">
+                <span class="material-icons">contacts</span>
+            contacts</button>
+            <button class="logoutButton" type="button" id="logoutButton" onclick="doLogout();">
+                <span class="material-icons">logout</span>
+            Logout</button>
+        </div>
+
+        <div class="aboutContainer">
+
+            <div class="top">
+                <div class="center">
+                    <img src="images/Team Photos/Chris.jpg" class="circle" alt="GoblinLogo">
+                    <p class="nameTitle">Chris Ferreira</p>
+                </div>
+                <div class="center">
+                    <img src="images/Team Photos/JacobP.jpg" class="circle" alt="GoblinLogo">
+                    <p class="nameTitle">Jacob Pasche</p>
+                </div>
+                <div class="center">
+                    <img src="images/Team Photos/Le.jpeg" class="circle" alt="GoblinLogo">
+                    <p class="nameTitle">Ha Le Van Thien</p>
+                </div>
+            </div>
+    
+            <div class="bottom">
+                <div class="center">
+                    <img src="images/Team Photos/Danny.jpg" class="circle" alt="GoblinLogo">
+                    <p class="nameTitle">Danny Bakos</p>
+                </div>
+                <div class="center">
+                    <img src="images/Team Photos/JacobT.jpeg" class="circle" alt="GoblinLogo">
+                    <p class="nameTitle">Jacob Thomas</p>
+                </div>
+            </div>
+        </div>
+        
+    </body>
+</html>
