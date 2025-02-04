@@ -243,8 +243,12 @@ function loadContactData()
                     tableData += `<td class="tableCell">${jsonObject.results[i].Email}</td>`
                     tableData += 
                     `<td class="tableCell">
-                        <button type="button" id="editRow${jsonObject.results[i].ID}" onClick="switchToEditContact(${jsonObject.results[i].ID});">Edit</button>
-                        <button type="button" id="deleteRow${jsonObject.results[i].ID}" onClick="showDeleteConfirm(${jsonObject.results[i].ID});">Delete</button>
+                        <button type="button" id="editRow${jsonObject.results[i].ID}" class="editButton" onClick="switchToEditContact(${jsonObject.results[i].ID});">
+                            <span class="material-icons">edit</span>
+                        </button>
+                        <button type="button" id="deleteRow${jsonObject.results[i].ID}" class="deleteButton" onClick="showDeleteConfirm(${jsonObject.results[i].ID});">
+                            <span class="material-icons">delete</span>
+                        </button>
                     </td></tr>`
                 }
 
