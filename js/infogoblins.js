@@ -674,6 +674,7 @@ function goblinize() {
                 //Contacts were loaded sucessfully
                 //For each contact in the results array
 				for (let i = 0; i < numContacts; i++) {
+                    if (jsonObject.results[i].ID in goblins) {goblins[jsonObject.results[i].ID].destroy()}
                     goblins[jsonObject.results[i].ID] = new Goblin(jsonObject.results[i].ID, 
                         jsonObject.results[i].FirstName, jsonObject.results[i].LastName);
                 }
