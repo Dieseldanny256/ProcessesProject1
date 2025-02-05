@@ -151,7 +151,7 @@
     font-weight: 400;
     font-size: 18px;
     font-style: normal;
-    transition: background 0.1s;
+    transition: 0.1s;
     cursor: pointer;
 }
 
@@ -171,6 +171,7 @@
     margin-top: 100px;
     align-items: center;
     justify-content: center;
+    transition: 0.5s;
 }
 
 .loginContainer
@@ -252,7 +253,7 @@
     font-weight: 400;
     font-size: 18px;
     font-style: normal;
-    transition: background 0.1s;
+    transition: 0.1s;
     cursor: pointer;
 }
 
@@ -357,7 +358,7 @@ input::placeholder {
     font-weight: 400;
     font-size: 18px;
     font-style: normal;
-    transition: background 0.1s;
+    transition: 0.1s;
     cursor: pointer;
 }
 
@@ -379,7 +380,7 @@ input::placeholder {
     height: 40px;
     margin: 7px;
     border-radius: 25%;
-    transition: background 0.1s;
+    transition: 0.1s;
     cursor: pointer;
 }
 
@@ -401,7 +402,7 @@ input::placeholder {
     height: 40px;
     margin: 7px;
     border-radius: 25%;
-    transition: background 0.1s;
+    transition: 0.1s;
     cursor: pointer;
 }
 
@@ -423,7 +424,7 @@ input::placeholder {
     height: 40px;
     margin: 7px;
     border-radius: 25%;
-    transition: background 0.1s;
+    transition: 0.1s;
     cursor: pointer;
 }
 
@@ -455,7 +456,7 @@ input::placeholder {
     font-weight: 400;
     font-size: 18px;
     font-style: normal;
-    transition: background 0.1s;
+    transition: 0.1s;
     cursor: pointer;
 }
 
@@ -487,7 +488,7 @@ input::placeholder {
     font-weight: 400;
     font-size: 18px;
     font-style: normal;
-    transition: background 0.1s;
+    transition: 0.1s;
     cursor: pointer;
 }
 
@@ -614,7 +615,7 @@ input::placeholder {
 
 .tableCell {
     background: var(--background-color);
-    overflow: hidden;
+    overflow: wrap;
 }
 
 .hidden {

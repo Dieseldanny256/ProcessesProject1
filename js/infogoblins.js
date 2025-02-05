@@ -132,6 +132,20 @@ function switchToRegister()
     document.getElementById("Login").classList.add("hidden");
     document.getElementById("Register").classList.remove("hidden");
     loginMode = "register";
+
+    document.getElementById("lastName").value = "";
+    document.getElementById("firstName").value = "";
+    document.getElementById("registerName").value = "";
+    document.getElementById("registerPassword").value = "";
+
+    document.getElementById("registerResult").innerHTML = "";
+    document.getElementById("lengthError").innerHTML = "";
+    document.getElementById("numberError").innerHTML = "";
+    document.getElementById("symbolError").innerHTML = "";
+    document.getElementById("capitalError").innerHTML = "";
+    document.getElementById("passwordRequirementsHeading").innerHTML = "";
+    document.getElementById("registerPassword").style.borderColor = null;
+    document.getElementById("registerButton").disabled = false;
 }
 
 function switchToLogin()
@@ -142,6 +156,11 @@ function switchToLogin()
     document.getElementById("Login").classList.remove("hidden");
     document.getElementById("Register").classList.add("hidden");
     loginMode = "login";
+
+    document.getElementById("loginName").value = "";
+    document.getElementById("loginPassword").value = "";
+
+    document.getElementById("loginResult").innerHTML = "";
 }
 
 function saveCookie()
@@ -447,6 +466,69 @@ function editContact(id)
         document.getElementById("editResult").style.color = errorColor;
         fadeResult();
         switchToContactsMenu();
+    }
+}
+
+function validatePassword()
+{
+    let lengthRegex = /^(\S){8,}$/; //Contains at least 8 chars
+    let numberRegex = /^(.*)([0-9]+)(.*)/; //Contains one or more digit
+    let capitalRegex = /^(.*)([A-Z]+)(.*)/; //Contains one or more capital letter
+    let symbolRegex = /^(.*)(\W|_+)(.*)/; //Containts one or more special characters
+    let errors = false;
+
+    let passwordElement = document.getElementById("registerPassword");
+    if (!lengthRegex.test(passwordElement.value))
+    {
+        document.getElementById("lengthError").innerHTML = "8 or more characters";
+        errors = true;
+    }
+    else
+    {
+        document.getElementById("lengthError").innerHTML = "";
+    }
+
+    if (!numberRegex.test(passwordElement.value))
+    {
+        document.getElementById("numberError").innerHTML = "1 or more digits";
+        errors = true;
+    }
+    else
+    {
+        document.getElementById("numberError").innerHTML = "";
+    }
+
+    if (!capitalRegex.test(passwordElement.value))
+    {
+        document.getElementById("capitalError").innerHTML = "1 or more capital letters";
+        errors = true;
+    }
+    else
+    {
+        document.getElementById("capitalError").innerHTML = "";
+    }
+
+    if (!symbolRegex.test(passwordElement.value))
+    {
+        document.getElementById("symbolError").innerHTML = "1 or more special characters";
+        errors = true;
+    }
+    else
+    {
+        document.getElementById("symbolError").innerHTML = "";
+    }
+
+    if (errors)
+    {
+        document.getElementById("passwordRequirementsHeading").innerHTML = "Password must contain:";
+        document.getElementById("registerButton").disabled = true;
+        document.getElementById("registerPassword").style.borderColor = errorColor;
+    }
+    else
+    {
+        document.getElementById("registerPassword").style.borderColor = null;
+        document.getElementById("passwordRequirementsHeading").innerHTML = "";
+        document.getElementById("registerButton").disabled = false;
     }
 }
 

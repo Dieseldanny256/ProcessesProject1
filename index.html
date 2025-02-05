@@ -7,6 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Infogoblins Contact Manager</title>
     <link rel="icon" href="images/InfoGoblinRecolor.png" type="image/icon type">
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            loadColors();
+            document.getElementById("registerPassword").addEventListener("keyup", function() 
+            {
+                validatePassword();
+            }, false);
+        }, false);
+    </script>
     <script type = "text/javascript" src = "js/infogoblins.js"></script>
     <link rel="stylesheet" href="css/infogoblins.css"/>
     <link rel="stylesheet" href="https://use.typekit.net/tge5jxx.css">
@@ -57,6 +66,11 @@
                 <div><input type="text" id="lastName" class="textField" placeholder="Last Name"/></div>
                 <div><input type="text" id="registerName" class="textField" placeholder="Username" /></div>
                 <div><input type="password" id="registerPassword" class="textField" placeholder="Password"/></div>
+                <div><span id="passwordRequirementsHeading" class="errorText"></span></div>
+                <div><span id="lengthError" class="errorText"></span></div>
+                <div><span id="numberError" class="errorText"></span></div>
+                <div><span id="capitalError" class="errorText"></span></div>
+                <div><span id="symbolError" class="errorText"></span></div>
                 <div><button type="button" id="registerButton" class="loginButton" onclick="doSignUp();"> Register </button></div>
                 <div><span id="registerResult" class="errorText"></span></div>
             </div>
